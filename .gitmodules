@@ -1,0 +1,3 @@
+[submodule "demo/lib/loconet-avrda"]
+	path = demo/lib/loconet-avrda
+	url = https://github.com/ejbergdk/loconet-avrda.git
