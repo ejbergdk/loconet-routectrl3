@@ -13,7 +13,7 @@
 
 #define TICKS_PER_SEC   1024
 
-typedef uint16_t ticks_t;
+typedef uint32_t ticks_t;
 
 extern void ticks_init(void);
 extern ticks_t ticks_get(void);

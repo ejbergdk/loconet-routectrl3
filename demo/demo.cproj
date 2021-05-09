@@ -137,6 +137,12 @@
     <Compile Include="cmd.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="lib\loconet-avrda\fifo.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\loconet-avrda\fifo.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="term.c">
       <SubType>compile</SubType>
     </Compile>
@@ -173,10 +179,22 @@
     <Compile Include="main.c">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="test_cmds.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="test_cmds.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="ticks.c">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="ticks.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="timer.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="timer.h">
       <SubType>compile</SubType>
     </Compile>
   </ItemGroup>

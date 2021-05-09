@@ -9,6 +9,7 @@
 #include <avr/io.h>
 #include "term.h"
 #include "ticks.h"
+#include "timer.h"
 #include "lib/loconet-avrda/hal_ln.h"
 #include "lib/loconet-avrda/ln_rx.h"
 
@@ -42,6 +43,7 @@ __attribute__((OS_main)) int main(void)
         term_update();
         hal_ln_update();
         ln_rx_update();
+        timer_update();
     }
 
     __builtin_unreachable();
