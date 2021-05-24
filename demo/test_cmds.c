@@ -58,12 +58,19 @@ static void in_timer_cb(void *ctx)
     hal_ln_send(txdata, NULL, NULL);
 }
 
-static void in_cb(void *ctx)
+static void in_cb(void *ctx, hal_ln_result_t res)
 {
-    // OPC_INPUT_REP track occupied sent. Wait before sending track free.
-    cmd_in_t   *p = (cmd_in_t *)ctx;
+    if (res == HAL_LN_SUCCESS)
+    {
+        // OPC_INPUT_REP track occupied sent. Wait before sending track free.
+        cmd_in_t   *p = (cmd_in_t *)ctx;
 
-    timer_add(p->delay, in_timer_cb, p);
+        timer_add(p->delay, in_timer_cb, p);
+    }
+    else
+    {
+        printf_P(PSTR("Tx fail\n"));
+    }
 }
 
 const __flash char cmdin_name[] = "in";
@@ -163,10 +170,17 @@ static void sw_timer_cb(void *ctx)
     hal_ln_send(txdata, NULL, NULL);
 }
 
-static void sw_cb(void *ctx)
+static void sw_cb(void *ctx, hal_ln_result_t res)
 {
-    // OPC_SW_REQ on sent. Wait 250 ms before sending off.
-    timer_add(TICKS_PER_SEC / 4, sw_timer_cb, ctx);
+    if (res == HAL_LN_SUCCESS)
+    {
+        // OPC_SW_REQ on sent. Wait 250 ms before sending off.
+        timer_add(TICKS_PER_SEC / 4, sw_timer_cb, ctx);
+    }
+    else
+    {
+        printf_P(PSTR("Tx fail\n"));
+    }
 }
 
 const __flash char cmdsw_name[] = "sw";
