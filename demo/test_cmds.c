@@ -24,16 +24,16 @@
 
 typedef struct
 {
-    uint16_t    adr;
-    ticks_t     delay;
+    uint16_t        adr;
+    ticks_t         delay;
 } cmd_in_t;
 
 static void in_timer_cb(void *ctx)
 {
     // OPC_INPUT_REP timeout. Send track free.
-    cmd_in_t   *p = (cmd_in_t *)ctx;
-    lnpacket_t *txdata;
-    uint16_t    adr;
+    cmd_in_t       *p = (cmd_in_t *) ctx;
+    lnpacket_t     *txdata;
+    uint16_t        adr;
 
     txdata = hal_ln_packet_get();
     if (!txdata)
@@ -63,7 +63,7 @@ static void in_cb(void *ctx, hal_ln_result_t res)
     if (res == HAL_LN_SUCCESS)
     {
         // OPC_INPUT_REP track occupied sent. Wait before sending track free.
-        cmd_in_t   *p = (cmd_in_t *)ctx;
+        cmd_in_t       *p = (cmd_in_t *) ctx;
 
         timer_add(p->delay, in_timer_cb, p);
     }
@@ -78,9 +78,9 @@ const __flash char cmdin_help[] = "Send OPC_INPUT_REP";
 
 void in_cmd(uint8_t argc, char *argv[])
 {
-    cmd_in_t   *p;
-    lnpacket_t *txdata;
-    uint16_t    adr;
+    cmd_in_t       *p;
+    lnpacket_t     *txdata;
+    uint16_t        adr;
 
     if (argc < 2)
     {
@@ -135,17 +135,17 @@ void in_cmd(uint8_t argc, char *argv[])
 
 typedef struct
 {
-    uint16_t    adr;
-    uint8_t     dir;
+    uint16_t        adr;
+    uint8_t         dir;
 } cmd_sw_t;
 
 static void sw_timer_cb(void *ctx)
 {
     // OPC_SW_REQ timeout. Send off.
-    cmd_sw_t   *p = (cmd_sw_t *)ctx;
-    lnpacket_t *txdata;
-    uint16_t    adr;
-    uint8_t     dir;
+    cmd_sw_t       *p = (cmd_sw_t *) ctx;
+    lnpacket_t     *txdata;
+    uint16_t        adr;
+    uint8_t         dir;
 
     txdata = hal_ln_packet_get();
     if (!txdata)
@@ -188,9 +188,9 @@ const __flash char cmdsw_help[] = "Send OPC_SW_REQ";
 
 void sw_cmd(uint8_t argc, char *argv[])
 {
-    cmd_sw_t   *p;
-    lnpacket_t *txdata;
-    uint16_t    adr;
+    cmd_sw_t       *p;
+    lnpacket_t     *txdata;
+    uint16_t        adr;
 
     if (argc < 3)
     {
@@ -218,17 +218,17 @@ void sw_cmd(uint8_t argc, char *argv[])
     p->adr = strtoul(argv[1], NULL, 0);
     switch (argv[2][0])
     {
-        case '0':
-        case 'r':
-        case 'R':
-        default:
-            p->dir = 0;
-            break;
-        case '1':
-        case 'g':
-        case 'G':
-            p->dir = 1;
-            break;
+    case '0':
+    case 'r':
+    case 'R':
+    default:
+        p->dir = 0;
+        break;
+    case '1':
+    case 'g':
+    case 'G':
+        p->dir = 1;
+        break;
     }
 
     adr = p->adr - 1;

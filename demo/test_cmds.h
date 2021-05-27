@@ -14,11 +14,11 @@
 
 extern const __flash char cmdin_name[];
 extern const __flash char cmdin_help[];
-extern void  in_cmd(uint8_t argc, char *argv[]);
+extern void     in_cmd(uint8_t argc, char *argv[]);
 
 extern const __flash char cmdsw_name[];
 extern const __flash char cmdsw_help[];
-extern void  sw_cmd(uint8_t argc, char *argv[]);
+extern void     sw_cmd(uint8_t argc, char *argv[]);
 
 
 #endif /* TEST_CMDS_H_ */

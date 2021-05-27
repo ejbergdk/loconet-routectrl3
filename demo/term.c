@@ -3,7 +3,7 @@
  *
  * Created: 16-05-2020 16:54:20
  *  Author: Mikael Ejberg Pedersen
- */ 
+ */
 
 #include <stdint.h>
 #include <stdio.h>
@@ -23,7 +23,7 @@
 /* TX section */
 
 #define TXBUF_LEN  512
-static char txbuf[TXBUF_LEN];
+static char     txbuf[TXBUF_LEN];
 static uint16_t txbuf_widx = 0;
 static volatile uint16_t txbuf_ridx = 0;
 
@@ -63,7 +63,7 @@ static void prompt(void)
 /* RX section */
 
 #define RXBUF_LEN 32
-static char rxbuf[RXBUF_LEN];
+static char     rxbuf[RXBUF_LEN];
 static volatile uint16_t rxbuf_widx = 0;
 static uint16_t rxbuf_ridx = 0;
 
@@ -76,11 +76,11 @@ ISR(USART1_RXC_vect)
 
 #define ARGUMENTS 16
 
-static void split_and_exec(char * cmd)
+static void split_and_exec(char *cmd)
 {
-    char *p;
-    uint8_t argc = 0;
-    char *argv[ARGUMENTS];
+    char           *p;
+    uint8_t         argc = 0;
+    char           *argv[ARGUMENTS];
 
     while (argc < ARGUMENTS)
     {
@@ -106,10 +106,10 @@ static void split_and_exec(char * cmd)
 
 void term_update(void)
 {
-    static char line[LINE_LEN];
+    static char     line[LINE_LEN];
     static uint16_t chars = 0;
-    uint16_t i;
-    char c;
+    uint16_t        i;
+    char            c;
 
     ATOMIC_BLOCK(ATOMIC_RESTORESTATE)
     {
@@ -124,28 +124,28 @@ void term_update(void)
 
     switch (c)
     {
-        case 0x0d:  // Carriage return
-            putchar('\n');
-            line[chars] = 0;
-            chars = 0;
-            split_and_exec(line);
-            break;
+    case 0x0d:                 // Carriage return
+        putchar('\n');
+        line[chars] = 0;
+        chars = 0;
+        split_and_exec(line);
+        break;
 
-        case 0x7f:  // Backspace
-            if (chars > 0)
-            {
-                chars--;
-                printf_P(PSTR("\b\e[1P"));
-            }
-            break;
+    case 0x7f:                 // Backspace
+        if (chars > 0)
+        {
+            chars--;
+            printf_P(PSTR("\b\e[1P"));
+        }
+        break;
 
-        default:
-            if ((c >= 0x20) && (chars < (LINE_LEN - 1)))
-            {
-                line[chars++] = c;
-                putchar(c);
-            }
-            break;
+    default:
+        if ((c >= 0x20) && (chars < (LINE_LEN - 1)))
+        {
+            line[chars++] = c;
+            putchar(c);
+        }
+        break;
     }
 }
 
@@ -153,7 +153,7 @@ void term_update(void)
 /**********/
 /* Common */
 
-static FILE dbg_uart = FDEV_SETUP_STREAM(tx_char, NULL, _FDEV_SETUP_WRITE);
+static FILE     dbg_uart = FDEV_SETUP_STREAM(tx_char, NULL, _FDEV_SETUP_WRITE);
 
 void term_init(void)
 {
@@ -165,7 +165,7 @@ void term_init(void)
     USART1.BAUD = BAUD_REG;
     USART1.DBGCTRL = USART_DBGRUN_bm;
     USART1.CTRLB = USART_RXEN_bm | USART_TXEN_bm | USART_RXMODE_NORMAL_gc;
-	USART1.STATUS = USART_RXCIF_bm | USART_TXCIF_bm;
+    USART1.STATUS = USART_RXCIF_bm | USART_TXCIF_bm;
     USART1.CTRLA |= USART_RXCIE_bm;
 
     stdout = &dbg_uart;

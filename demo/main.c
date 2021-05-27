@@ -3,7 +3,7 @@
  *
  * Created: 16-05-2020 12:45:30
  * Author : Mikael Ejberg Pedersen
- */ 
+ */
 
 #include <avr/interrupt.h>
 #include <avr/io.h>
@@ -13,10 +13,12 @@
 #include "lib/loconet-avrda/hal_ln.h"
 #include "lib/loconet-avrda/ln_rx.h"
 
-__attribute__((OS_main)) int main(void)
+__attribute__((OS_main))
+int main(void)
 {
     // Enable 32.768 kHz crystal oscillator
-    _PROTECTED_WRITE(CLKCTRL.XOSC32KCTRLA, CLKCTRL_RUNSTDBY_bm | CLKCTRL_CSUT_32K_gc | CLKCTRL_LPMODE_bm | CLKCTRL_ENABLE_bm);
+    _PROTECTED_WRITE(CLKCTRL.XOSC32KCTRLA,
+                     CLKCTRL_RUNSTDBY_bm | CLKCTRL_CSUT_32K_gc | CLKCTRL_LPMODE_bm | CLKCTRL_ENABLE_bm);
     // Wait for crystal to stabilize
     while (!(CLKCTRL.MCLKSTATUS & CLKCTRL_XOSC32KS_bm));
     // Switch to 24 MHz clock with frequency correction
@@ -37,7 +39,7 @@ __attribute__((OS_main)) int main(void)
     PORTC.OUTSET = PIN6_bm;
 
     sei();
-		
+
     while (1)
     {
         term_update();

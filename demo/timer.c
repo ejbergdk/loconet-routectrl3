@@ -24,7 +24,7 @@ static timer_t *head = NULL;
 
 void timer_add(ticks_t timeout, timer_cb *cb, void *ctx)
 {
-    timer_t *p, *t;
+    timer_t        *p, *t;
 
     t = malloc(sizeof(*t));
     if (!t)
@@ -35,7 +35,7 @@ void timer_add(ticks_t timeout, timer_cb *cb, void *ctx)
     t->cb = cb;
     t->ctx = ctx;
 
-    if (!head)  // No timers in list
+    if (!head)                  // No timers in list
     {
         head = t;
         head->next = NULL;
@@ -64,7 +64,7 @@ void timer_add(ticks_t timeout, timer_cb *cb, void *ctx)
 
 void timer_update(void)
 {
-    timer_t *p;
+    timer_t        *p;
 
     if (!head)
         return;
