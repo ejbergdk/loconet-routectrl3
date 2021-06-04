@@ -12,7 +12,7 @@
 #include "test_cmds.h"
 #include "lib/loconet-avrda/hal_ln.h"
 
-typedef void    (*cmdfunc_t) (uint8_t argc, char *argv[]);
+typedef void    (*cmdfunc_t)(uint8_t argc, char *argv[]);
 static const __flash char cmdhelp_name[] = "help";
 static const __flash char cmdhelp_help[] = "Help";
 
