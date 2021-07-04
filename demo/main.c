@@ -7,6 +7,7 @@
 
 #include <avr/interrupt.h>
 #include <avr/io.h>
+#include "collision_check.h"
 #include "term.h"
 #include "ticks.h"
 #include "timer.h"
@@ -33,6 +34,7 @@ int main(void)
     ticks_init();
     hal_ln_init();
     ln_rx_init();
+    collision_check_init();
 
     // Setup LED0. Only for AVR128DA48 CNano
     PORTC.DIRSET = PIN6_bm;
@@ -46,6 +48,7 @@ int main(void)
         hal_ln_update();
         ln_rx_update();
         timer_update();
+        collision_check_update();
     }
 
     __builtin_unreachable();

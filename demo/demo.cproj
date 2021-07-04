@@ -60,7 +60,6 @@
   <avrgcc.compiler.symbols.DefSymbols>
     <ListValues>
       <Value>F_CPU=24000000UL</Value>
-      <Value>CCLDEBUG</Value>
       <Value>LNMONITOR</Value>
       <Value>NDEBUG</Value>
     </ListValues>
@@ -101,7 +100,6 @@
   <avrgcc.compiler.symbols.DefSymbols>
     <ListValues>
       <Value>F_CPU=24000000UL</Value>
-      <Value>CCLDEBUG</Value>
       <Value>LNMONITOR</Value>
       <Value>DEBUG</Value>
       <Value>LNSTAT</Value>
@@ -136,6 +134,12 @@
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="cmd.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="collision_check.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="collision_check.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="lib\loconet-avrda\fifo.c">
