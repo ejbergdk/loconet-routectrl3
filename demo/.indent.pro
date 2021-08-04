@@ -6,4 +6,5 @@
 -T FILE
 -T hal_ln_tx_done_cb
 -T lnpacket_t
+-T swq_state_t
 -T timer_cb

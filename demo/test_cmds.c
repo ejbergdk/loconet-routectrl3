@@ -6,9 +6,11 @@
  */
 
 #include <avr/pgmspace.h>
+#include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include "switch_queue.h"
 #include "test_cmds.h"
 #include "ticks.h"
 #include "timer.h"
@@ -98,44 +100,13 @@ void in_cmd(uint8_t argc, char *argv[])
  * Sends an OPC_SW_REQ .... TODO
  */
 
-typedef struct
-{
-    uint16_t        adr;
-    uint8_t         dir;
-} cmd_sw_t;
-
-static void sw_timer_cb(void *ctx)
-{
-    // OPC_SW_REQ timeout. Send off.
-    cmd_sw_t       *p = (cmd_sw_t *) ctx;
-    uint16_t        adr;
-    uint8_t         dir;
-
-    adr = p->adr;
-    dir = p->dir;
-    free(p);
-
-    printf_P(PSTR("Sending sw off: %u %c\n"), adr, dir ? 'G' : 'R');
-
-    if (ln_tx_opc_sw_req(adr, dir, false, NULL, NULL))
-        printf_P(PSTR("Out of lnpackets\n"));
-}
-
-static void sw_cb(void *ctx, hal_ln_result_t res)
-{
-    if (res == HAL_LN_SUCCESS)
-        // OPC_SW_REQ on sent. Wait 250 ms before sending off.
-        timer_add(TICKS_PER_SEC / 4, sw_timer_cb, ctx);
-    else
-        printf_P(PSTR("Tx fail\n"));
-}
-
 const __flash char cmdsw_name[] = "sw";
 const __flash char cmdsw_help[] = "Send OPC_SW_REQ";
 
 void sw_cmd(uint8_t argc, char *argv[])
 {
-    cmd_sw_t       *p;
+    uint16_t        adr;
+    bool            dir;
 
     if (argc < 3)
     {
@@ -145,31 +116,23 @@ void sw_cmd(uint8_t argc, char *argv[])
         return;
     }
 
-    p = malloc(sizeof(*p));
-    if (!p)
-    {
-        printf_P(PSTR("Out of memory\n"));
-        return;
-    }
-
-    p->adr = strtoul(argv[1], NULL, 0);
+    adr = strtoul(argv[1], NULL, 0);
     switch (argv[2][0])
     {
     case '0':
     case 'r':
     case 'R':
     default:
-        p->dir = 0;
+        dir = false;
         break;
     case '1':
     case 'g':
     case 'G':
-        p->dir = 1;
+        dir = true;
         break;
     }
 
-    printf_P(PSTR("Sending sw on: %u %c\n"), p->adr, p->dir ? 'G' : 'R');
+    printf_P(PSTR("Sending sw_req: %u %c\n"), adr, dir ? 'G' : 'R');
 
-    if (ln_tx_opc_sw_req(p->adr, p->dir, true, sw_cb, p))
-        printf_P(PSTR("Out of lnpackets\n"));
+    switch_queue_add(adr, dir);
 }

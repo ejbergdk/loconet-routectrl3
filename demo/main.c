@@ -8,6 +8,7 @@
 #include <avr/interrupt.h>
 #include <avr/io.h>
 #include "collision_check.h"
+#include "switch_queue.h"
 #include "term.h"
 #include "ticks.h"
 #include "timer.h"
@@ -49,6 +50,7 @@ int main(void)
         ln_rx_update();
         timer_update();
         collision_check_update();
+        switch_queue_update();
     }
 
     __builtin_unreachable();
