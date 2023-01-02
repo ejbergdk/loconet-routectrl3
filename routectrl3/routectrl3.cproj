@@ -103,6 +103,18 @@
   <avrgcc.assembler.general.IncludePaths><ListValues><Value>%24(PackRepoDir)\atmel\AVR-Dx_DFP\2.2.253\include\</Value></ListValues></avrgcc.assembler.general.IncludePaths>
   <avrgcc.compiler.optimization.level>Optimize debugging experience (-Og)</avrgcc.compiler.optimization.level>
   <avrgcc.compiler.optimization.DebugLevel>Default (-g2)</avrgcc.compiler.optimization.DebugLevel>
+  <avrgcc.compiler.warnings.AllWarnings>True</avrgcc.compiler.warnings.AllWarnings>
+  <avrgcc.linker.libraries.Libraries>
+    <ListValues>
+      <Value>libm</Value>
+    </ListValues>
+  </avrgcc.linker.libraries.Libraries>
+  <avrgcc.linker.miscellaneous.LinkerFlags>-T %24(ProjectDir)\avrxmega4.x</avrgcc.linker.miscellaneous.LinkerFlags>
+  <avrgcc.assembler.general.IncludePaths>
+    <ListValues>
+      <Value>%24(PackRepoDir)\Atmel\AVR-Dx_DFP\2.0.141\include\</Value>
+    </ListValues>
+  </avrgcc.assembler.general.IncludePaths>
   <avrgcc.assembler.debugging.DebugLevel>Default (-Wa,-g)</avrgcc.assembler.debugging.DebugLevel>
 </AvrGcc>
     </ToolchainSettings>
@@ -112,6 +124,12 @@
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="collision_check.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="fb_handler.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="fb_handler.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="lib\loconet-avrda\fifo.c">

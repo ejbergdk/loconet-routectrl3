@@ -122,6 +122,22 @@ SECTIONS
     *(SORT_BY_NAME(cmdtable*))
     PROVIDE (__cmdtable_end = .) ;
     KEEP(*(cmdtable*))
+    PROVIDE (__loconet_fbocctable_start = .) ;
+    *(SORT_BY_NAME(loconet.fbocctable*))
+    PROVIDE (__loconet_fbocctable_end = .) ;
+    KEEP(*(loconet.fbocctable*))
+    PROVIDE (__loconet_fbfreetable_start = .) ;
+    *(SORT_BY_NAME(loconet.fbfreetable*))
+    PROVIDE (__loconet_fbfreetable_end = .) ;
+    KEEP(*(loconet.fbfreetable*))
+    PROVIDE (__loconet_fbrangeocctable_start = .) ;
+    *(loconet.fbrangeocctable)
+    PROVIDE (__loconet_fbrangeocctable_end = .) ;
+    KEEP(*(loconet.fbrangeocctable))
+    PROVIDE (__loconet_fbrangefreetable_start = .) ;
+    *(loconet.fbrangefreetable)
+    PROVIDE (__loconet_fbrangefreetable_end = .) ;
+    KEEP(*(loconet.fbrangefreetable))
     /* From this point on, we don't bother about wether the insns are
        below or above the 16 bits boundary.  */
     *(.init0)  /* Start here after reset.  */
