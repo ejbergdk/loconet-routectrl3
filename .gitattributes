@@ -16,3 +16,6 @@
 *.jpg binary
 *.bin binary
 
+# Files with LF only (also in Windows)
+*.x text eol=lf
+
