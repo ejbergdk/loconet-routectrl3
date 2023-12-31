@@ -6,6 +6,7 @@
  */
 
 #include <stddef.h>
+#include <stdint.h>
 #include <stdlib.h>
 #include "ticks.h"
 #include "timer.h"
@@ -22,13 +23,13 @@ typedef struct timer_t_
 static timer_t *head = NULL;
 
 
-void timer_add(ticks_t timeout, timer_cb *cb, void *ctx)
+int8_t timer_add(ticks_t timeout, timer_cb *cb, void *ctx)
 {
     timer_t        *p, *t;
 
     t = malloc(sizeof(*t));
     if (!t)
-        return;
+        return -1;
 
     timeout += ticks_get();
     t->timeout = timeout;
@@ -39,7 +40,7 @@ void timer_add(ticks_t timeout, timer_cb *cb, void *ctx)
     {
         head = t;
         head->next = NULL;
-        return;
+        return 0;
     }
 
     if (!((head->timeout - timeout) & 0x80000000))
@@ -47,7 +48,7 @@ void timer_add(ticks_t timeout, timer_cb *cb, void *ctx)
         // New timer is shorter than timer in head. Put new timer first
         t->next = head;
         head = t;
-        return;
+        return 0;
     }
 
     p = head;
@@ -60,6 +61,8 @@ void timer_add(ticks_t timeout, timer_cb *cb, void *ctx)
 
     t->next = p->next;
     p->next = t;
+
+    return 0;
 }
 
 void timer_update(void)

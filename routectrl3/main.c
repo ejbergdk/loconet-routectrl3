@@ -18,14 +18,20 @@
 __attribute__((OS_main))
 int main(void)
 {
+#ifdef EXTXTAL
     // Enable 32.768 kHz crystal oscillator
     _PROTECTED_WRITE(CLKCTRL.XOSC32KCTRLA,
                      CLKCTRL_RUNSTDBY_bm | CLKCTRL_CSUT_32K_gc | CLKCTRL_LPMODE_bm | CLKCTRL_ENABLE_bm);
     // Wait for crystal to stabilize
     while (!(CLKCTRL.MCLKSTATUS & CLKCTRL_XOSC32KS_bm));
+#endif
     // Switch to 24 MHz clock with frequency correction
     _PROTECTED_WRITE(CLKCTRL.PLLCTRLA, CLKCTRL_MULFAC_DISABLE_gc);
-    _PROTECTED_WRITE(CLKCTRL.OSCHFCTRLA, CLKCTRL_RUNSTDBY_bm | CLKCTRL_FRQSEL_24M_gc | CLKCTRL_AUTOTUNE_bm);
+    _PROTECTED_WRITE(CLKCTRL.OSCHFCTRLA, CLKCTRL_RUNSTDBY_bm | CLKCTRL_FRQSEL_24M_gc
+#ifdef EXTXTAL
+                     | CLKCTRL_AUTOTUNE_bm
+#endif
+        );
     _PROTECTED_WRITE(CLKCTRL.MCLKCTRLA, CLKCTRL_CLKSEL_OSCHF_gc);
     _PROTECTED_WRITE(CLKCTRL.MCLKCTRLB, 0);
     // Lock clock setup

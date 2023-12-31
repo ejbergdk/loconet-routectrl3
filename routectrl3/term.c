@@ -7,13 +7,12 @@
 
 #include <stdint.h>
 #include <stdio.h>
-#include <string.h>
 #include <avr/interrupt.h>
 #include <avr/io.h>
 #include <avr/pgmspace.h>
 #include <util/atomic.h>
-#include "cmd.h"
 #include "term.h"
+#include "lib/avr-shell-cmd/cmd.h"
 
 #define BAUDRATE 115200UL
 #define BAUD_REG ((64 * F_CPU + 8 * BAUDRATE) / (16 * BAUDRATE))
@@ -74,34 +73,6 @@ ISR(USART1_RXC_vect)
         rxbuf_widx = 0;
 }
 
-#define ARGUMENTS 16
-
-static void split_and_exec(char *cmd)
-{
-    char           *p;
-    uint8_t         argc = 0;
-    char           *argv[ARGUMENTS];
-
-    while (argc < ARGUMENTS)
-    {
-        while (*cmd == ' ')
-            cmd++;
-        if (!(*cmd))
-            break;
-        argv[argc++] = cmd;
-        p = strchr(cmd, ' ');
-        if (!p)
-            break;
-        *p++ = 0;
-        cmd = p;
-    }
-
-    if (argc)
-        cmd_exec(argc, argv);
-
-    prompt();
-}
-
 #define LINE_LEN 128
 
 void term_update(void)
@@ -128,7 +99,8 @@ void term_update(void)
         putchar('\n');
         line[chars] = 0;
         chars = 0;
-        split_and_exec(line);
+        cmd_split_exec(line);
+        prompt();
         break;
 
     case 0x7f:                 // Backspace

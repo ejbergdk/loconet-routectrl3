@@ -49,7 +49,7 @@
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <ToolchainSettings>
       <AvrGcc>
-  <avrgcc.common.Device>-mmcu=avr128da48 -B "%24(PackRepoDir)\Atmel\AVR-Dx_DFP\2.0.141\gcc\dev\avr128da48"</avrgcc.common.Device>
+  <avrgcc.common.Device>-mmcu=avr128da48 -B "%24(PackRepoDir)\atmel\AVR-Dx_DFP\2.2.253\gcc\dev\avr128da48"</avrgcc.common.Device>
   <avrgcc.common.outputfiles.hex>True</avrgcc.common.outputfiles.hex>
   <avrgcc.common.outputfiles.lss>True</avrgcc.common.outputfiles.lss>
   <avrgcc.common.outputfiles.eep>True</avrgcc.common.outputfiles.eep>
@@ -59,14 +59,18 @@
   <avrgcc.compiler.general.ChangeDefaultBitFieldUnsigned>True</avrgcc.compiler.general.ChangeDefaultBitFieldUnsigned>
   <avrgcc.compiler.symbols.DefSymbols><ListValues>
   <Value>F_CPU=24000000UL</Value>
+  <Value>LNPACKET_SIZE_MAX=6</Value>
+  <Value>LNPACKET_CNT=16</Value>
+  <Value>EXTXTAL</Value>
   <Value>NDEBUG</Value>
 </ListValues></avrgcc.compiler.symbols.DefSymbols>
-  <avrgcc.compiler.directories.IncludePaths><ListValues><Value>%24(PackRepoDir)\Atmel\AVR-Dx_DFP\2.0.141\include\</Value></ListValues></avrgcc.compiler.directories.IncludePaths>
+  <avrgcc.compiler.directories.IncludePaths><ListValues><Value>%24(PackRepoDir)\atmel\AVR-Dx_DFP\2.2.253\include\</Value><Value>%24(ProjectDir)\lib\</Value></ListValues></avrgcc.compiler.directories.IncludePaths>
   <avrgcc.compiler.optimization.PackStructureMembers>True</avrgcc.compiler.optimization.PackStructureMembers>
   <avrgcc.compiler.optimization.AllocateBytesNeededForEnum>True</avrgcc.compiler.optimization.AllocateBytesNeededForEnum>
   <avrgcc.compiler.warnings.AllWarnings>True</avrgcc.compiler.warnings.AllWarnings>
   <avrgcc.linker.libraries.Libraries><ListValues><Value>libm</Value></ListValues></avrgcc.linker.libraries.Libraries>
-  <avrgcc.assembler.general.IncludePaths><ListValues><Value>%24(PackRepoDir)\Atmel\AVR-Dx_DFP\2.0.141\include\</Value></ListValues></avrgcc.assembler.general.IncludePaths>
+  <avrgcc.linker.miscellaneous.LinkerFlags>-T %24(ProjectDir)\avrxmega4.x</avrgcc.linker.miscellaneous.LinkerFlags>
+  <avrgcc.assembler.general.IncludePaths><ListValues><Value>%24(PackRepoDir)\atmel\AVR-Dx_DFP\2.2.253\include\</Value></ListValues></avrgcc.assembler.general.IncludePaths>
   <avrgcc.compiler.optimization.level>Optimize for size (-Os)</avrgcc.compiler.optimization.level>
 </AvrGcc>
     </ToolchainSettings>
@@ -74,7 +78,7 @@
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <ToolchainSettings>
       <AvrGcc>
-  <avrgcc.common.Device>-mmcu=avr128da48 -B "%24(PackRepoDir)\Atmel\AVR-Dx_DFP\2.0.141\gcc\dev\avr128da48"</avrgcc.common.Device>
+  <avrgcc.common.Device>-mmcu=avr128da48 -B "%24(PackRepoDir)\atmel\AVR-Dx_DFP\2.2.253\gcc\dev\avr128da48"</avrgcc.common.Device>
   <avrgcc.common.outputfiles.hex>True</avrgcc.common.outputfiles.hex>
   <avrgcc.common.outputfiles.lss>True</avrgcc.common.outputfiles.lss>
   <avrgcc.common.outputfiles.eep>True</avrgcc.common.outputfiles.eep>
@@ -84,15 +88,19 @@
   <avrgcc.compiler.general.ChangeDefaultBitFieldUnsigned>True</avrgcc.compiler.general.ChangeDefaultBitFieldUnsigned>
   <avrgcc.compiler.symbols.DefSymbols><ListValues>
   <Value>F_CPU=24000000UL</Value>
+  <Value>LNPACKET_SIZE_MAX=6</Value>
+  <Value>LNPACKET_CNT=16</Value>
+  <Value>EXTXTAL</Value>
   <Value>DEBUG</Value>
   <Value>LNSTAT</Value>
 </ListValues></avrgcc.compiler.symbols.DefSymbols>
-  <avrgcc.compiler.directories.IncludePaths><ListValues><Value>%24(PackRepoDir)\Atmel\AVR-Dx_DFP\2.0.141\include\</Value></ListValues></avrgcc.compiler.directories.IncludePaths>
+  <avrgcc.compiler.directories.IncludePaths><ListValues><Value>%24(PackRepoDir)\atmel\AVR-Dx_DFP\2.2.253\include\</Value><Value>%24(ProjectDir)\lib\</Value></ListValues></avrgcc.compiler.directories.IncludePaths>
   <avrgcc.compiler.optimization.PackStructureMembers>True</avrgcc.compiler.optimization.PackStructureMembers>
   <avrgcc.compiler.optimization.AllocateBytesNeededForEnum>True</avrgcc.compiler.optimization.AllocateBytesNeededForEnum>
   <avrgcc.compiler.warnings.AllWarnings>True</avrgcc.compiler.warnings.AllWarnings>
   <avrgcc.linker.libraries.Libraries><ListValues><Value>libm</Value></ListValues></avrgcc.linker.libraries.Libraries>
-  <avrgcc.assembler.general.IncludePaths><ListValues><Value>%24(PackRepoDir)\Atmel\AVR-Dx_DFP\2.0.141\include\</Value></ListValues></avrgcc.assembler.general.IncludePaths>
+  <avrgcc.linker.miscellaneous.LinkerFlags>-T %24(ProjectDir)\avrxmega4.x</avrgcc.linker.miscellaneous.LinkerFlags>
+  <avrgcc.assembler.general.IncludePaths><ListValues><Value>%24(PackRepoDir)\atmel\AVR-Dx_DFP\2.2.253\include\</Value></ListValues></avrgcc.assembler.general.IncludePaths>
   <avrgcc.compiler.optimization.level>Optimize debugging experience (-Og)</avrgcc.compiler.optimization.level>
   <avrgcc.compiler.optimization.DebugLevel>Default (-g2)</avrgcc.compiler.optimization.DebugLevel>
   <avrgcc.assembler.debugging.DebugLevel>Default (-Wa,-g)</avrgcc.assembler.debugging.DebugLevel>
@@ -100,12 +108,6 @@
     </ToolchainSettings>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="cmd.c">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="cmd.h">
-      <SubType>compile</SubType>
-    </Compile>
     <Compile Include="collision_check.c">
       <SubType>compile</SubType>
     </Compile>
@@ -169,9 +171,6 @@
     <Compile Include="test_cmds.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="test_cmds.h">
-      <SubType>compile</SubType>
-    </Compile>
     <Compile Include="ticks.c">
       <SubType>compile</SubType>
     </Compile>
@@ -184,10 +183,22 @@
     <Compile Include="timer.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="lib\avr-shell-cmd\cmd.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lib\avr-shell-cmd\cmd.h">
+      <SubType>compile</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="lib\" />
+    <Folder Include="lib\avr-shell-cmd\" />
     <Folder Include="lib\loconet-avrda\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="avrxmega4.x">
+      <SubType>compile</SubType>
+    </None>
   </ItemGroup>
   <Import Project="$(AVRSTUDIO_EXE_PATH)\\Vs\\Compiler.targets" />
 </Project>

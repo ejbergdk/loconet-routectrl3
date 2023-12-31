@@ -1,3 +1,6 @@
 [submodule "routectrl3/lib/loconet-avrda"]
 	path = routectrl3/lib/loconet-avrda
 	url = https://github.com/ejbergdk/loconet-avrda.git
+[submodule "routectrl3/lib/avr-shell-cmd"]
+	path = routectrl3/lib/avr-shell-cmd
+	url = https://github.com/ejbergdk/avr-shell-cmd.git
