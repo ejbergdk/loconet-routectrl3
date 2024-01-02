@@ -119,9 +119,9 @@ SECTIONS
     KEEP(SORT(*)(.ctors))
     KEEP(SORT(*)(.dtors))
     PROVIDE (__cmdtable_start = .) ;
-    *(SORT_BY_NAME(.cmdtable*))
+    *(SORT_BY_NAME(cmdtable*))
     PROVIDE (__cmdtable_end = .) ;
-    KEEP(*(.cmdtable*))
+    KEEP(*(cmdtable*))
     /* From this point on, we don't bother about wether the insns are
        below or above the 16 bits boundary.  */
     *(.init0)  /* Start here after reset.  */
