@@ -7,12 +7,13 @@
 
 #include <stdbool.h>
 #include <stdint.h>
+#include "switch_queue.h"
 #include "ticks.h"
 #include "lib/loconet-avrda/ln_tx.h"
 
-#define SWITCH_ACTIVE_TIME  (TICKS_PER_SEC / 8)
-#define SWITCH_DELAY_TIME   (TICKS_PER_SEC / 8)
-#define QUEUE_SIZE          64
+#define SWITCH_ACTIVE_TIME  TICKS_FROM_MS(327)
+#define SWITCH_DELAY_TIME   TICKS_FROM_MS(50)
+#define QUEUE_SIZE          16
 
 typedef enum
 {
@@ -71,18 +72,22 @@ void switch_queue_update(void)
     default:
         if (queue_ridx != queue_widx)
         {
-            state = SWQ_STATE_WAIT_CB;
-            next_state = SWQ_STATE_ACTIVE;
-            ln_tx_opc_sw_req(queue[queue_ridx].adr, queue[queue_ridx].dir, true, sw_cb, &next_state);
+            if (ln_tx_opc_sw_req(queue[queue_ridx].adr, queue[queue_ridx].dir, true, sw_cb, &next_state) == 0)
+            {
+                state = SWQ_STATE_WAIT_CB;
+                next_state = SWQ_STATE_ACTIVE;
+            }
         }
         break;
 
     case SWQ_STATE_ACTIVE:
         if (ticks_elapsed(last_activity) >= SWITCH_ACTIVE_TIME)
         {
-            state = SWQ_STATE_WAIT_CB;
-            next_state = SWQ_STATE_DELAY;
-            ln_tx_opc_sw_req(queue[queue_ridx].adr, queue[queue_ridx].dir, false, sw_cb, &next_state);
+            if (ln_tx_opc_sw_req(queue[queue_ridx].adr, queue[queue_ridx].dir, false, sw_cb, &next_state) == 0)
+            {
+                state = SWQ_STATE_WAIT_CB;
+                next_state = SWQ_STATE_DELAY;
+            }
         }
         break;
 
@@ -100,4 +105,9 @@ void switch_queue_update(void)
         // Do nothing. Waiting for callback
         break;
     }
+}
+
+bool switch_queue_empty(void)
+{
+    return (state == SWQ_STATE_IDLE && queue_ridx == queue_widx);
 }

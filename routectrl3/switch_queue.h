@@ -29,4 +29,11 @@ extern void     switch_queue_update(void);
  */
 extern void     switch_queue_add(uint16_t adr, bool dir);
 
+/**
+ * Get switch queue empty status.
+ *
+ * @return True if queue is empty.
+ */
+extern bool     switch_queue_empty(void);
+
 #endif /* SWITCH_QUEUE_H_ */
