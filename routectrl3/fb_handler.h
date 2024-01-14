@@ -15,8 +15,8 @@ typedef void    (feedback_cb) (uint16_t);
 
 typedef struct
 {
-    uint16_t        adr;
-    feedback_cb    *cb;
+    const uint16_t  adr;
+    const feedback_cb *cb;
 } feedback_table_t;
 
 #define FEEDBACK_OCC(num, func) static const feedback_table_t fboccentry##num \
@@ -29,9 +29,9 @@ typedef struct
 
 typedef struct
 {
-    uint16_t        adr_start;
-    uint16_t        adr_end;
-    feedback_cb    *cb;
+    const uint16_t  adr_start;
+    const uint16_t  adr_end;
+    const feedback_cb *cb;
 } feedbackrange_table_t;
 
 #define FEEDBACK_RANGE_OCC(start, end, func) static const feedbackrange_table_t fbrangeoccentry##start##end \
