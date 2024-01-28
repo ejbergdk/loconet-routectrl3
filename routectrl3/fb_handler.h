@@ -11,12 +11,12 @@
 #include <stdbool.h>
 #include <stdint.h>
 
-typedef void    (feedback_cb) (uint16_t);
+typedef void    (*feedback_cb_t)(uint16_t);
 
 typedef struct
 {
     const uint16_t  adr;
-    const feedback_cb *cb;
+    const feedback_cb_t cb;
 } feedback_table_t;
 
 #define FEEDBACK_OCC(num, func) static const feedback_table_t fboccentry##num \
@@ -31,7 +31,7 @@ typedef struct
 {
     const uint16_t  adr_start;
     const uint16_t  adr_end;
-    const feedback_cb *cb;
+    const feedback_cb_t cb;
 } feedbackrange_table_t;
 
 #define FEEDBACK_RANGE_OCC(start, end, func) static const feedbackrange_table_t fbrangeoccentry##start##end \

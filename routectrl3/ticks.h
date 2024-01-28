@@ -11,7 +11,9 @@
 
 #include <stdint.h>
 
-#define TICKS_PER_SEC   1024
+#define TICKS_PER_SEC   1024UL
+
+#define TICKS_FROM_MS(x) ((x * TICKS_PER_SEC + 999) / 1000)
 
 typedef uint32_t ticks_t;
 

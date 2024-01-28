@@ -37,8 +37,18 @@ ISR(USART1_DRE_vect)
 
 static int tx_char(char c, FILE *stream)
 {
+    uint16_t        rtmp;
+
     if (c == '\n')
         tx_char('\r', stream);
+
+    do
+    {
+        ATOMIC_BLOCK(ATOMIC_RESTORESTATE)
+        {
+            rtmp = txbuf_ridx;
+        }
+    } while ((rtmp == txbuf_widx) && (USART1.CTRLA & USART_DREIE_bm));
 
     ATOMIC_BLOCK(ATOMIC_RESTORESTATE)
     {

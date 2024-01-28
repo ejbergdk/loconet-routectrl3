@@ -138,6 +138,11 @@ SECTIONS
     *(loconet.fbrangefreetable)
     PROVIDE (__loconet_fbrangefreetable_end = .) ;
     KEEP(*(loconet.fbrangefreetable))
+    PROVIDE (__loconet_routetable_start = .) ;
+    *(loconet.routetable)
+    PROVIDE (__loconet_routetable_end = .) ;
+    KEEP(*(loconet.routetable))
+    . = ALIGN(2);
     /* From this point on, we don't bother about wether the insns are
        below or above the 16 bits boundary.  */
     *(.init0)  /* Start here after reset.  */

@@ -141,3 +141,24 @@ static void swCmd(uint8_t argc, char *argv[])
 }
 
 CMD(sw, "Send OPC_SW_REQ");
+
+
+/********************************************************************/
+
+
+/*
+ * Test command TIME
+ *
+ * Time a command
+ */
+static void timeCmd(uint8_t argc, char *argv[])
+{
+    ticks_t         t0 = ticks_get();
+
+    if (argc >= 2)
+        cmd_exec(argc - 1, argv + 1);
+    t0 = ticks_elapsed(t0);
+    printf_P(PSTR("Time: %u ticks\n"), t0);
+}
+
+CMD(time, "Time a command");
