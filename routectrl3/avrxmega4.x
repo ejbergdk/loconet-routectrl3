@@ -138,6 +138,14 @@ SECTIONS
     *(loconet.fbrangefreetable)
     PROVIDE (__loconet_fbrangefreetable_end = .) ;
     KEEP(*(loconet.fbrangefreetable))
+    PROVIDE (__loconet_swreqtable_start = .) ;
+    *(SORT_BY_NAME(loconet.swreqtable*))
+    PROVIDE (__loconet_swreqtable_end = .) ;
+    KEEP(*(loconet.swreqtable*))
+    PROVIDE (__loconet_swreqrangetable_start = .) ;
+    *(loconet.swreqrangetable)
+    PROVIDE (__loconet_swreqrangetable_end = .) ;
+    KEEP(*(loconet.swreqrangetable))
     PROVIDE (__loconet_routetable_start = .) ;
     *(loconet.routetable)
     PROVIDE (__loconet_routetable_end = .) ;

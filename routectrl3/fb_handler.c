@@ -1,6 +1,9 @@
 /*
  * fb_handler.c
  *
+ * Feedback handler.
+ * Receives OPC_INPUT_REP from Loconet and calls feedback subscribers.
+ *
  * Created: 02-01-2023 17:22:47
  *  Author: Mikael Ejberg Pedersen
  */
@@ -34,7 +37,7 @@ extern const __flash feedbackrange_table_t __loconet_fbrangefreetable_start;
 extern const __flash feedbackrange_table_t __loconet_fbrangefreetable_end;
 
 
-static void fb_set_state(uint16_t adr, bool l)
+void fb_handler_set_state(uint16_t adr, bool l)
 {
     uint16_t        idx;
     uint8_t         mask;
@@ -52,7 +55,7 @@ static void fb_set_state(uint16_t adr, bool l)
 }
 
 
-bool fb_get_state(uint16_t adr)
+bool fb_handler_get_state(uint16_t adr)
 {
     uint16_t        idx;
     uint8_t         mask;
@@ -79,7 +82,7 @@ static void fbCmd(uint8_t argc, char *argv[])
     }
 
     adr = strtoul(argv[1], NULL, 0);
-    if (fb_get_state(adr))
+    if (fb_handler_get_state(adr))
         printf_P(PSTR("Occupied\n"));
     else
         printf_P(PSTR("Free\n"));
@@ -148,7 +151,7 @@ void ln_rx_opc_input_rep(uint16_t adr, uint8_t l, uint8_t x)
     if (!x)
         return;
 
-    fb_set_state(adr, l != 0);
+    fb_handler_set_state(adr, l != 0);
 
     feedback_callback(adr, l);
     feedback_range_callback(adr, l);
