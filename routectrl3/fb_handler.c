@@ -136,7 +136,7 @@ static void feedback_range_callback(uint16_t adr, uint8_t l)
 
     while (p < pend)
     {
-        if (p->adr_start >= adr && p->adr_end <= adr)
+        if (adr >= p->adr_start && adr <= p->adr_end)
             p->cb(adr);
         p++;
     }
