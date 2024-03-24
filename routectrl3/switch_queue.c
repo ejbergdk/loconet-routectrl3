@@ -7,6 +7,7 @@
 
 #include <stdbool.h>
 #include <stdint.h>
+#include "sw_handler.h"
 #include "switch_queue.h"
 #include "ticks.h"
 #include "lib/loconet-avrda/ln_tx.h"
@@ -19,6 +20,7 @@ typedef enum
 {
     SWQ_STATE_IDLE,
     SWQ_STATE_ACTIVE,
+    SWQ_STATE_ACTIVE_DELAY,
     SWQ_STATE_DELAY,
     SWQ_STATE_WAIT_CB
 } swq_state_t;
@@ -81,6 +83,14 @@ void switch_queue_update(void)
         break;
 
     case SWQ_STATE_ACTIVE:
+#ifndef LNECHO
+        // Update switch state (only needed if not receiving own LN echo).
+        sw_handler_set_state(queue[queue_ridx].adr, queue[queue_ridx].dir != 0);
+#endif
+        state = SWQ_STATE_ACTIVE_DELAY;
+        break;
+
+    case SWQ_STATE_ACTIVE_DELAY:
         if (ticks_elapsed(last_activity) >= SWITCH_ACTIVE_TIME)
         {
             if (ln_tx_opc_sw_req(queue[queue_ridx].adr, queue[queue_ridx].dir, false, sw_cb, &next_state) == 0)

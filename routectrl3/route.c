@@ -186,12 +186,15 @@ void route_cancel(routenum_t num)
         return;
     }
 
-    if (parm[num].state == ROUTE_ACTIVE)
-    {
 #ifdef ROUTE_DEBUG
+    if (parm[num].state != ROUTE_FREE)
+    {
         printf_P(PSTR("Route %u cancel\n"), num);
+    }
 #endif
 
+    if (parm[num].state == ROUTE_ACTIVE)
+    {
         p = getrouteentry(num);
         if (p)
         {

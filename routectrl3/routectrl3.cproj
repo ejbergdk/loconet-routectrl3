@@ -185,6 +185,12 @@
     <Compile Include="switch_queue.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="sw_handler.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="sw_handler.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="term.c">
       <SubType>compile</SubType>
     </Compile>

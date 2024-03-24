@@ -9,6 +9,7 @@
 #include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>
+#include "fb_handler.h"
 #include "route_queue.h"
 #include "switch_queue.h"
 #include "ticks.h"
@@ -63,6 +64,11 @@ void route_queue_update(void)
     case RQ_CMD_FB:
         if (ln_tx_opc_input_rep(queue[queue_ridx].adr, queue[queue_ridx].opt, NULL, NULL) != 0)
             return;             // input_rep failed. Do not advance queue_ridx
+
+#ifndef LNECHO
+        // Update fb state (only needed if not receiving own LN echo).
+        fb_handler_set_state(queue[queue_ridx].adr, queue[queue_ridx].opt != 0);
+#endif
 
 #ifdef ROUTE_DEBUG
         printf_P(PSTR("Send FB %u %S\n"), queue[queue_ridx].adr,
