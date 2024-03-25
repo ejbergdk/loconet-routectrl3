@@ -42,7 +42,7 @@ void fb_handler_set_state(uint16_t adr, bool l)
     uint16_t        idx;
     uint8_t         mask;
 
-    if (adr >= FEEDBACK_ADR_MAX)
+    if (adr == 0 || adr >= FEEDBACK_ADR_MAX)
         return;
 
     adr--;
@@ -60,7 +60,7 @@ bool fb_handler_get_state(uint16_t adr)
     uint16_t        idx;
     uint8_t         mask;
 
-    if (adr >= FEEDBACK_ADR_MAX)
+    if (adr == 0 || adr >= FEEDBACK_ADR_MAX)
         return false;
 
     adr--;
