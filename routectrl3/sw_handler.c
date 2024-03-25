@@ -38,7 +38,7 @@ void sw_handler_set_state(uint16_t adr, bool dir)
     uint16_t        idx;
     uint8_t         mask;
 
-    if (adr >= SW_ADR_MAX)
+    if (adr == 0 || adr >= SW_ADR_MAX)
         return;
 
     adr--;
@@ -56,7 +56,7 @@ bool sw_handler_get_state(uint16_t adr)
     uint16_t        idx;
     uint8_t         mask;
 
-    if (adr >= SW_ADR_MAX)
+    if (adr == 0 || adr >= SW_ADR_MAX)
         return false;
 
     adr--;
