@@ -8,6 +8,7 @@
 #include <avr/interrupt.h>
 #include <avr/io.h>
 #include "collision_check.h"
+#include "mmi.h"
 #include "route.h"
 #include "switch_queue.h"
 #include "term.h"
@@ -43,11 +44,8 @@ int main(void)
     hal_ln_init();
     ln_rx_init();
     collision_check_init();
+    mmi_init();
     route_init();
-
-    // Setup LED0. Only for AVR128DA48 CNano
-    PORTC.DIRSET = PIN6_bm;
-    PORTC.OUTSET = PIN6_bm;
 
     sei();
 
@@ -59,6 +57,7 @@ int main(void)
         timer_update();
         collision_check_update();
         switch_queue_update();
+        mmi_update();
         route_update();
     }
 

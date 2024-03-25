@@ -164,6 +164,12 @@
     <Compile Include="lib\loconet-avrda\ln_tx.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="mmi.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="mmi.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="route.c">
       <SubType>compile</SubType>
     </Compile>
