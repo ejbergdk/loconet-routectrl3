@@ -8,6 +8,7 @@
 #include <avr/interrupt.h>
 #include <avr/io.h>
 #include "collision_check.h"
+#include "ctrl_init.h"
 #include "mmi.h"
 #include "route.h"
 #include "sw_handler.h"
@@ -56,6 +57,7 @@ int main(void)
     collision_check_init();
     mmi_init();
     route_init();
+    ctrl_init_init();
 
     sei();
 
