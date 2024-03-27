@@ -9,9 +9,12 @@
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdio.h>
+#include "fb_handler.h"
 #include "route.h"
 #include "route_queue.h"
 #include "switch_queue.h"
+#include "lib/loconet-avrda/ln_tx.h"
+
 
 extern const __flash route_table_t __loconet_routetable_start;
 extern const __flash route_table_t __loconet_routetable_end;
@@ -267,4 +270,18 @@ void route_send_sw_prio(uint16_t adr, bool opt)
 void route_send_fb(uint16_t adr, bool opt)
 {
     route_queue_add(adr, opt, RQ_CMD_FB);
+}
+
+void route_send_fb_prio(uint16_t adr, bool opt)
+{
+    ln_tx_opc_input_rep(adr, opt, NULL, NULL);
+
+#ifndef LNECHO
+    // Update fb state (only needed if not receiving own LN echo).
+    fb_handler_set_state(adr, opt);
+#endif
+
+#ifdef ROUTE_DEBUG
+    printf_P(PSTR("Send FB %u %S\n"), adr, opt ? PSTR("OCCUPIED") : PSTR("FREE"));
+#endif
 }

@@ -182,4 +182,14 @@ extern void     route_send_sw_prio(uint16_t adr, bool opt);
  */
 extern void     route_send_fb(uint16_t adr, bool opt);
 
+/*
+ * Send prioritized feedback report.
+ *
+ * Send a feedback report before other commands already in queue.
+ *
+ * @param adr Feedback address.
+ * @param opt Feedback info (FB_FREE / FB_OCCUPIED).
+ */
+extern void     route_send_fb_prio(uint16_t adr, bool opt);
+
 #endif /* ROUTE_H_ */

@@ -108,4 +108,12 @@ extern void     fb_handler_set_state(uint16_t adr, bool l);
  */
 extern bool     fb_handler_get_state(uint16_t adr);
 
+/**
+ * Get number of received feedback packets received.
+ * Wraps at overflow.
+ *
+ * @return    Feedback packets received.
+ */
+extern uint16_t fb_handler_get_packets_received(void);
+
 #endif /* FB_HANDLER_H_ */
