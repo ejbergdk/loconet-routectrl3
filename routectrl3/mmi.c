@@ -16,20 +16,22 @@
 
 #define BUTTON_DEBOUNCE_TICKS TICKS_FROM_MS(50)
 
-#define OPERATING_LEVEL_MIN 1
+#define OPERATING_LEVEL_MIN 0
 #define OPERATING_LEVEL_MAX 4
 
-static uint8_t  operating_level = 0;
+static uint8_t  operating_level = OPERATING_LEVEL_MIN;
 
 typedef enum
 {
-    LED_INIT = 0,
+    LED_RESTART = 0,
+    LED_INIT,
+    LED_DO_INIT,
     LED_OFF,
     LED_ON,
     LED_DELAY
 } led_state_t;
 
-static led_state_t led_state = LED_INIT;
+static led_state_t led_state = LED_RESTART;
 
 typedef enum
 {
@@ -59,12 +61,25 @@ static void led_update(void)
 
     switch (led_state)
     {
-    case LED_INIT:
+    case LED_RESTART:
     default:
         PORTC.OUTSET = PIN6_bm;
         count = 0;
         time = ticks_get();
         led_state = LED_OFF;
+        break;
+
+    case LED_INIT:
+        time = ticks_get();
+        led_state = LED_DO_INIT;
+        break;
+
+    case LED_DO_INIT:
+        if (ticks_elapsed(time) >= LED_ON_TICKS)
+        {
+            PORTC.OUTTGL = PIN6_bm;
+            time = ticks_get();
+        }
         break;
 
     case LED_OFF:
@@ -132,7 +147,7 @@ static void button_update(void)
             operating_level++;
             if (operating_level > OPERATING_LEVEL_MAX)
                 operating_level = OPERATING_LEVEL_MIN;
-            led_state = LED_INIT;
+            led_state = LED_RESTART;
         }
         break;
 
@@ -165,13 +180,36 @@ void mmi_update(void)
 }
 
 
-void mmi_operating_level_set(uint8_t level)
-{
-    operating_level = level;
-}
-
-
 uint8_t mmi_operating_level_get(void)
 {
     return operating_level;
+}
+
+
+void mmi_operating_level_decrease(void)
+{
+    if (operating_level > OPERATING_LEVEL_MIN)
+    {
+        operating_level--;
+        led_state = LED_RESTART;
+    }
+}
+
+
+void mmi_operating_level_increase(void)
+{
+    if (operating_level < OPERATING_LEVEL_MAX)
+    {
+        operating_level++;
+        led_state = LED_RESTART;
+    }
+}
+
+
+void mmi_in_init(bool init)
+{
+    if (init)
+        led_state = LED_INIT;
+    else
+        led_state = LED_RESTART;
 }

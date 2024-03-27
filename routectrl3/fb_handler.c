@@ -27,6 +27,8 @@
 static uint8_t  feedback_state[FB_ARRAY_SIZE];
 static const __flash uint8_t adr_mask[] = { 1, 2, 4, 8, 16, 32, 64, 128 };
 
+static uint16_t feedback_cnt = 0;
+
 extern const __flash feedback_table_t __loconet_fbocctable_start;
 extern const __flash feedback_table_t __loconet_fbocctable_end;
 extern const __flash feedback_table_t __loconet_fbfreetable_start;
@@ -151,8 +153,15 @@ void ln_rx_opc_input_rep(uint16_t adr, uint8_t l, uint8_t x)
     if (!x)
         return;
 
+    feedback_cnt++;
+
     fb_handler_set_state(adr, l != 0);
 
     feedback_callback(adr, l);
     feedback_range_callback(adr, l);
+}
+
+uint16_t fb_handler_get_packets_received(void)
+{
+    return feedback_cnt;
 }

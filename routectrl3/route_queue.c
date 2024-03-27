@@ -36,7 +36,7 @@ void route_queue_add(uint16_t adr, bool opt, route_queue_cmd_t cmd)
 {
     // NOTE: There is no buffer full check
     queue[queue_widx].adr = adr;
-    queue[queue_widx].opt = opt;
+    queue[queue_widx].opt = opt ? 1 : 0;
     queue[queue_widx].cmd = cmd;
     queue_widx++;
     if (queue_widx >= QUEUE_SIZE)
@@ -58,7 +58,7 @@ void route_queue_update(void)
         printf_P(PSTR("Send SW %u %c\n"), queue[queue_ridx].adr, queue[queue_ridx].opt ? 'G' : 'R');
 #endif
 
-        switch_queue_add(queue[queue_ridx].adr, queue[queue_ridx].opt);
+        switch_queue_add(queue[queue_ridx].adr, queue[queue_ridx].opt != 0);
         break;
 
     case RQ_CMD_FB:
