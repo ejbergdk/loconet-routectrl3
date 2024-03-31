@@ -11,6 +11,8 @@
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
+#include "timer.h"
+
 
 #ifndef MAXROUTES
 #define MAXROUTES 200
@@ -128,6 +130,22 @@ extern void     route_forceactive(routenum_t num);
  * @param num Route number to kill.
  */
 extern void     route_kill(routenum_t num);
+
+/*
+ * Add a delayed execution.
+ *
+ * @param timeout   Delay time in seconds.
+ * @param cb        Delay timeout function callback.
+ * @param num       Route number. Used as reference for delay cancel.
+ */
+extern void     route_delay_add(uint16_t timeout, timer_cb *cb, routenum_t num);
+
+/*
+ * Cancel a delay.
+ *
+ * @param num Route number to cancel delay for.
+ */
+extern void     route_delay_cancel(routenum_t num);
 
 /*
  * Get route state.
