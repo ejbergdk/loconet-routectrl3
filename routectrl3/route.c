@@ -8,11 +8,14 @@
 #include <avr/pgmspace.h>
 #include <stdbool.h>
 #include <stddef.h>
+#include <stdint.h>
 #include <stdio.h>
 #include "fb_handler.h"
 #include "route.h"
 #include "route_queue.h"
 #include "switch_queue.h"
+#include "ticks.h"
+#include "timer.h"
 #include "lib/loconet-avrda/ln_tx.h"
 
 
@@ -241,6 +244,28 @@ void route_kill(routenum_t num)
 #endif
 
     parm[num].state = ROUTE_FREE;
+}
+
+void route_delay_add(uint16_t timeout, timer_cb *cb, routenum_t num)
+{
+    uintptr_t       ref = num;
+
+#ifdef ROUTE_DEBUG
+    printf_P(PSTR("Route %u add delay %u seconds\n"), num, timeout);
+#endif
+
+    timer_add(TICKS_FROM_SEC(timeout), cb, (void *)ref);
+}
+
+void route_delay_cancel(routenum_t num)
+{
+    uintptr_t       ref = num;
+
+#ifdef ROUTE_DEBUG
+    printf_P(PSTR("Route %u cancel delay\n"), num);
+#endif
+
+    timer_delete((void *)ref);
 }
 
 route_state_t route_state(routenum_t num)

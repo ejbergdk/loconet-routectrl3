@@ -65,6 +65,26 @@ int8_t timer_add(ticks_t timeout, timer_cb *cb, void *ctx)
     return 0;
 }
 
+void timer_delete(void *ctx)
+{
+    timer_t       **p = &head;
+
+    while (*p)
+    {
+        if ((*p)->ctx == ctx)
+        {
+            timer_t        *q = *p;
+
+            *p = q->next;
+            free(q);
+        }
+        else
+        {
+            p = &((*p)->next);
+        }
+    }
+}
+
 void timer_update(void)
 {
     timer_t        *p;

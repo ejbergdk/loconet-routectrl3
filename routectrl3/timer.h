@@ -16,6 +16,7 @@
 typedef void    (timer_cb) (void *);
 
 extern int8_t   timer_add(ticks_t timeout, timer_cb *cb, void *ctx);
+extern void     timer_delete(void *ctx);
 extern void     timer_update(void);
 
 #endif /* TIMER_H_ */
