@@ -246,9 +246,18 @@ void route_kill(routenum_t num)
     parm[num].state = ROUTE_FREE;
 }
 
+
+/*
+ * Offset to ctx for timer calls.
+ * If timers are used for other purposes with real pointers to RAM,
+ * make sure the ctx "pointers" used in route_delays does NOT
+ * point to any valid RAM address.
+ */
+#define TIMER_CTX_OFFSET 0x8000
+
 void route_delay_add(uint16_t timeout, timer_cb *cb, routenum_t num)
 {
-    uintptr_t       ref = num;
+    uintptr_t       ref = num + TIMER_CTX_OFFSET;
 
 #ifdef ROUTE_DEBUG
     printf_P(PSTR("Route %u add delay %u seconds\n"), num, timeout);
@@ -259,7 +268,7 @@ void route_delay_add(uint16_t timeout, timer_cb *cb, routenum_t num)
 
 void route_delay_cancel(routenum_t num)
 {
-    uintptr_t       ref = num;
+    uintptr_t       ref = num + TIMER_CTX_OFFSET;
 
 #ifdef ROUTE_DEBUG
     printf_P(PSTR("Route %u cancel delay\n"), num);
