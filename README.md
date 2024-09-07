@@ -10,9 +10,8 @@ The possibilities range from the simple, like setting a signal to red once a tra
 to the complex, like queueing up routes from one place on the layout to another with interlocking,
 so conflicting routes can't be activated at the same time and trains won't collide. Well, at least in theory.
 
-The requirements is a model railroad layout, that uses Loconet.
-The layout must have signals that can stop the trains. This controller does **not** control the locomotives directly,
-only through signals.
+The requirements are a model railroad layout that uses Loconet, and the layout must have signals that can stop the trains.
+This controller does **not** control the locomotives directly, only through signals.
 
 Some knowledge of AVR microcontrollers and C code is required.
 
@@ -28,4 +27,4 @@ This repository uses submodules. Add **--recurse-submodules** when cloning the p
 
 ***git clone --recurse-submodules https://github.com/ejbergdk/loconet-routectrl3.git***
 
-Alternatively, run ***git submodule update --init --recursive*** after cloning.
+Alternatively, run ***git submodule update --init --recursive*** if you have already cloned the repo without it.
