@@ -14,6 +14,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "fb_handler.h"
+#include "flashmem.h"
 #include "lib/avr-shell-cmd/cmd.h"
 #include "lib/loconet-avrda/hal_ln.h"
 #include "lib/loconet-avrda/ln_rx.h"
@@ -29,14 +30,14 @@ static const __flash uint8_t adr_mask[] = { 1, 2, 4, 8, 16, 32, 64, 128 };
 
 static uint16_t feedback_cnt = 0;
 
-extern const __flash feedback_table_t __loconet_fbocctable_start;
-extern const __flash feedback_table_t __loconet_fbocctable_end;
-extern const __flash feedback_table_t __loconet_fbfreetable_start;
-extern const __flash feedback_table_t __loconet_fbfreetable_end;
-extern const __flash feedbackrange_table_t __loconet_fbrangeocctable_start;
-extern const __flash feedbackrange_table_t __loconet_fbrangeocctable_end;
-extern const __flash feedbackrange_table_t __loconet_fbrangefreetable_start;
-extern const __flash feedbackrange_table_t __loconet_fbrangefreetable_end;
+extern const FLASHMEM feedback_table_t __loconet_fbocctable_start;
+extern const FLASHMEM feedback_table_t __loconet_fbocctable_end;
+extern const FLASHMEM feedback_table_t __loconet_fbfreetable_start;
+extern const FLASHMEM feedback_table_t __loconet_fbfreetable_end;
+extern const FLASHMEM feedbackrange_table_t __loconet_fbrangeocctable_start;
+extern const FLASHMEM feedbackrange_table_t __loconet_fbrangeocctable_end;
+extern const FLASHMEM feedbackrange_table_t __loconet_fbrangefreetable_start;
+extern const FLASHMEM feedbackrange_table_t __loconet_fbrangefreetable_end;
 
 
 void fb_handler_set_state(uint16_t adr, bool l)
@@ -95,7 +96,7 @@ CMD(fb, "Feedback");
 
 static void feedback_callback(uint16_t adr, uint8_t l)
 {
-    const __flash feedback_table_t *p, *pend;
+    const FLASHMEM feedback_table_t *p, *pend;
     bool            found = false;
 
     if (l != 0)                 // Occupied
@@ -126,7 +127,7 @@ static void feedback_callback(uint16_t adr, uint8_t l)
 
 static void feedback_range_callback(uint16_t adr, uint8_t l)
 {
-    const __flash feedbackrange_table_t *p, *pend;
+    const FLASHMEM feedbackrange_table_t *p, *pend;
 
     if (l != 0)                 // Occupied
     {

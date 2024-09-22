@@ -11,6 +11,7 @@
 #include <stdint.h>
 #include <stdio.h>
 #include "fb_handler.h"
+#include "flashmem.h"
 #include "route.h"
 #include "route_queue.h"
 #include "switch_queue.h"
@@ -19,8 +20,8 @@
 #include "lib/loconet-avrda/ln_tx.h"
 
 
-extern const __flash route_table_t __loconet_routetable_start;
-extern const __flash route_table_t __loconet_routetable_end;
+extern const FLASHMEM route_table_t __loconet_routetable_start;
+extern const FLASHMEM route_table_t __loconet_routetable_end;
 
 typedef struct
 {
@@ -30,9 +31,9 @@ typedef struct
 static routeparm_t parm[MAXROUTES];
 
 
-static const __flash route_table_t *getrouteentry(routenum_t num)
+static const FLASHMEM route_table_t *getrouteentry(routenum_t num)
 {
-    const __flash route_table_t *p = &__loconet_routetable_start;
+    const FLASHMEM route_table_t *p = &__loconet_routetable_start;
 
     while (p < &__loconet_routetable_end)
     {
@@ -44,10 +45,10 @@ static const __flash route_table_t *getrouteentry(routenum_t num)
     return NULL;
 }
 
-static bool checkdependencies(const __flash route_table_t * rc)
+static bool checkdependencies(const FLASHMEM route_table_t * rc)
 {
     size_t          i = rc->dependency_cnt;
-    const __flash routenum_t *dep = rc->dependency;
+    const FLASHMEM routenum_t *dep = rc->dependency;
 
     while (i--)
     {
@@ -71,7 +72,7 @@ void route_init(void)
 void route_update(void)
 {
     static routenum_t num = 0;
-    const __flash route_table_t *p;
+    const FLASHMEM route_table_t *p;
 
     // Update sub-includes
     route_queue_update();
@@ -122,7 +123,7 @@ void route_update(void)
 
 void route_request(routenum_t num)
 {
-    const __flash route_table_t *p;
+    const FLASHMEM route_table_t *p;
 
     if (num >= MAXROUTES)
     {
@@ -154,7 +155,7 @@ void route_request(routenum_t num)
 
 void route_free(routenum_t num)
 {
-    const __flash route_table_t *p;
+    const FLASHMEM route_table_t *p;
 
     if (num >= MAXROUTES)
     {
@@ -184,7 +185,7 @@ void route_free(routenum_t num)
 
 void route_cancel(routenum_t num)
 {
-    const __flash route_table_t *p;
+    const FLASHMEM route_table_t *p;
 
     if (num >= MAXROUTES)
     {
