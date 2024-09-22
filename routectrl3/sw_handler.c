@@ -13,6 +13,7 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include "flashmem.h"
 #include "sw_handler.h"
 #include "lib/avr-shell-cmd/cmd.h"
 #include "lib/loconet-avrda/hal_ln.h"
@@ -27,10 +28,10 @@
 static uint8_t  sw_state[SW_ARRAY_SIZE];
 static const __flash uint8_t adr_mask[] = { 1, 2, 4, 8, 16, 32, 64, 128 };
 
-extern const __flash switchreq_table_t __loconet_swreqtable_start;
-extern const __flash switchreq_table_t __loconet_swreqtable_end;
-extern const __flash swreqrange_table_t __loconet_swreqrangetable_start;
-extern const __flash swreqrange_table_t __loconet_swreqrangetable_end;
+extern const FLASHMEM switchreq_table_t __loconet_swreqtable_start;
+extern const FLASHMEM switchreq_table_t __loconet_swreqtable_end;
+extern const FLASHMEM swreqrange_table_t __loconet_swreqrangetable_start;
+extern const FLASHMEM swreqrange_table_t __loconet_swreqrangetable_end;
 
 
 void sw_handler_set_state(uint16_t adr, bool dir)
@@ -89,7 +90,7 @@ CMD(sws, "Switch state");
 
 static void swreq_callback(uint16_t adr, bool dir)
 {
-    const __flash switchreq_table_t *p, *pend;
+    const FLASHMEM switchreq_table_t *p, *pend;
     bool            found = false;
 
     p = &__loconet_swreqtable_start;
@@ -112,7 +113,7 @@ static void swreq_callback(uint16_t adr, bool dir)
 
 static void swreq_range_callback(uint16_t adr, bool dir)
 {
-    const __flash swreqrange_table_t *p, *pend;
+    const FLASHMEM swreqrange_table_t *p, *pend;
 
     p = &__loconet_swreqrangetable_start;
     pend = &__loconet_swreqrangetable_end;

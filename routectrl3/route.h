@@ -11,6 +11,7 @@
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
+#include "flashmem.h"
 #include "timer.h"
 
 
@@ -30,7 +31,7 @@ typedef struct
 {
     const routenum_t routenum;
     const size_t    dependency_cnt;
-    const __flash routenum_t *dependency;
+    const FLASHMEM routenum_t *dependency;
     const route_cb_t activateroute;
     const route_cb_t freeroute;
     const route_cb_t cancelroute;
@@ -50,7 +51,7 @@ typedef struct
  * @param ... List of route dependencies. Can be omitted.
  */
 #define ROUTE(num, act, fre, can, ...) \
-static const __flash routenum_t routedeps##num[] = { __VA_ARGS__ }; \
+static const FLASHMEM routenum_t routedeps##num[] = { __VA_ARGS__ }; \
 static const route_table_t routeentry##num \
 __attribute__((used, section("loconet.routetable"))) = { \
     .routenum = num, \
