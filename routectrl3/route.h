@@ -31,7 +31,7 @@ typedef struct
 {
     const routenum_t routenum;
     const size_t    dependency_cnt;
-    const FLASHMEM routenum_t *dependency;
+    const FLASHMEM uint16_t *dependency;
     const route_cb_t activateroute;
     const route_cb_t freeroute;
     const route_cb_t cancelroute;
@@ -51,7 +51,7 @@ typedef struct
  * @param ... List of route dependencies. Can be omitted.
  */
 #define ROUTE(num, act, fre, can, ...) \
-static const FLASHMEM routenum_t routedeps##num[] = { __VA_ARGS__ }; \
+static const FLASHMEM uint16_t routedeps##num[] = { __VA_ARGS__ }; \
 static const route_table_t routeentry##num \
 __attribute__((used, section("loconet.routetable"))) = { \
     .routenum = num, \
@@ -61,6 +61,21 @@ __attribute__((used, section("loconet.routetable"))) = { \
     .freeroute = fre, \
     .cancelroute = can \
 };
+
+#define ROUTE_CSTR_DATA_MASK 0x0fff
+#define ROUTE_CSTR_TYPE_MASK 0xf000
+#define ROUTE_CSTR_TYPE_RT   0x0000
+#define ROUTE_CSTR_TYPE_FB   0x1000
+
+/**
+ * Route constraint (not really needed)
+ */
+#define CSTR_RT(num) num
+
+/**
+ * Feedback constraint
+ */
+#define CSTR_FB(num) (num | ROUTE_CSTR_TYPE_FB)
 
 typedef enum
 {

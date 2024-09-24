@@ -48,19 +48,36 @@ static const FLASHMEM route_table_t *getrouteentry(routenum_t num)
 static bool checkdependencies(const FLASHMEM route_table_t * rc)
 {
     size_t          i = rc->dependency_cnt;
-    const FLASHMEM routenum_t *dep = rc->dependency;
+    const FLASHMEM uint16_t *dep = rc->dependency;
 
     while (i--)
     {
-        routenum_t      num = *dep++;
+        uint16_t        num = *dep++;
 
-        if (num >= MAXROUTES)
-            continue;
+        switch (num & ROUTE_CSTR_TYPE_MASK)
+        {
+        case ROUTE_CSTR_TYPE_RT:
+            {
+                // Constraint is a route
+                if (num >= MAXROUTES)
+                    continue;
 
-        route_state_t   state = parm[num].state;
+                route_state_t   state = parm[num].state;
 
-        if (state == ROUTE_AWAITEXE || state == ROUTE_ACTIVE)
+                if (state == ROUTE_AWAITEXE || state == ROUTE_ACTIVE)
+                    return false;
+            }
+
+        case ROUTE_CSTR_TYPE_FB:
+            // Constraint is a feedback
+            if (fb_handler_get_state(num & ROUTE_CSTR_DATA_MASK))
+                return false;
+            break;
+
+        default:
+            printf_P(PSTR("ERROR: Unknown constraint type 0x%04x on route %u\n"), num, rc->routenum);
             return false;
+        }
     }
     return true;
 }
