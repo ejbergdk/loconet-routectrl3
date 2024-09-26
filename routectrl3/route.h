@@ -55,7 +55,7 @@ static const FLASHMEM uint16_t routedeps##num[] = { __VA_ARGS__ }; \
 static const route_table_t routeentry##num \
 __attribute__((used, section("loconet.routetable"))) = { \
     .routenum = num, \
-    .dependency_cnt = sizeof(routedeps##num) / sizeof(routenum_t), \
+    .dependency_cnt = sizeof(routedeps##num) / sizeof(routedeps##num[0]), \
     .dependency = routedeps##num, \
     .activateroute = act, \
     .freeroute = fre, \

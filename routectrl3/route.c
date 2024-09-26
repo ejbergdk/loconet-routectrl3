@@ -66,6 +66,8 @@ static bool checkdependencies(const FLASHMEM route_table_t * rc)
 
                 if (state == ROUTE_AWAITEXE || state == ROUTE_ACTIVE)
                     return false;
+
+                break;
             }
 
         case ROUTE_CSTR_TYPE_FB:
