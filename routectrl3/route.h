@@ -30,8 +30,8 @@ typedef void    (*route_cb_t)(void);
 typedef struct
 {
     const routenum_t routenum;
-    const size_t    dependency_cnt;
-    const FLASHMEM uint16_t *dependency;
+    const size_t    constraint_cnt;
+    const FLASHMEM uint16_t *constraint;
     const route_cb_t activateroute;
     const route_cb_t freeroute;
     const route_cb_t cancelroute;
@@ -42,21 +42,21 @@ typedef struct
  *
  * Creates a new route.
  * When route is requested, it is queued up and will automatically activate
- * when all dependencies are satisfied (all are free).
+ * when all constraints are satisfied (all are free).
  *
  * @param num Route number. Must be unique and from 0 to MAXROUTES-1.
  * @param act Route activation function callback. NULL if not used.
  * @param fre Route free function callback. NULL if not used.
  * @param can Route cancel function callback. NULL if not used.
- * @param ... List of route dependencies. Can be omitted.
+ * @param ... List of route constraints. Can be omitted.
  */
 #define ROUTE(num, act, fre, can, ...) \
-static const FLASHMEM uint16_t routedeps##num[] = { __VA_ARGS__ }; \
+static const FLASHMEM uint16_t routecstrs##num[] = { __VA_ARGS__ }; \
 static const route_table_t routeentry##num \
 __attribute__((used, section("loconet.routetable"))) = { \
     .routenum = num, \
-    .dependency_cnt = sizeof(routedeps##num) / sizeof(routedeps##num[0]), \
-    .dependency = routedeps##num, \
+    .constraint_cnt = sizeof(routecstrs##num) / sizeof(routecstrs##num[0]), \
+    .constraint = routecstrs##num, \
     .activateroute = act, \
     .freeroute = fre, \
     .cancelroute = can \
@@ -80,7 +80,7 @@ __attribute__((used, section("loconet.routetable"))) = { \
 typedef enum
 {
     ROUTE_FREE = 0,
-    ROUTE_AWAITDEP,
+    ROUTE_AWAITCSTR,
     ROUTE_AWAITEXE,
     ROUTE_ACTIVE
 } route_state_t;
@@ -104,7 +104,7 @@ extern void     route_update(void);
  * Request route.
  *
  * Route request is queued, and it will activate as soon as
- * all route dependencies are free.
+ * all route constraints are free.
  *
  * @param num Route number to request.
  */
@@ -131,7 +131,7 @@ extern void     route_cancel(routenum_t num);
 /*
  * Force activate route.
  *
- * Mark route as active, without running activation callback.
+ * Mark route as active, without running activation callback or checking constraints.
  * Usually used during init while populating track occupancy feedback.
  *
  * @param num Route number to force activate.
