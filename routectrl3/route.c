@@ -45,14 +45,14 @@ static const FLASHMEM route_table_t *getrouteentry(routenum_t num)
     return NULL;
 }
 
-static bool checkdependencies(const FLASHMEM route_table_t * rc)
+static bool checkconstraints(const FLASHMEM route_table_t * rc)
 {
-    size_t          i = rc->dependency_cnt;
-    const FLASHMEM uint16_t *dep = rc->dependency;
+    size_t          i = rc->constraint_cnt;
+    const FLASHMEM uint16_t *cstr = rc->constraint;
 
     while (i--)
     {
-        uint16_t        num = *dep++;
+        uint16_t        num = *cstr++;
 
         switch (num & ROUTE_CSTR_TYPE_MASK)
         {
@@ -106,12 +106,12 @@ void route_update(void)
     case ROUTE_ACTIVE:
         return;
 
-    case ROUTE_AWAITDEP:
+    case ROUTE_AWAITCSTR:
         p = getrouteentry(num);
         if (!p)
             return;
-        // Check dependencies
-        if (!checkdependencies(p))
+        // Check constraints
+        if (!checkconstraints(p))
             return;
         break;
 
@@ -157,14 +157,14 @@ void route_request(routenum_t num)
     printf_P(PSTR("Route %u request\n"), num);
 #endif
 
-    // Check dependencies
+    // Check constraints
     p = getrouteentry(num);
     if (p)
     {
-        if (checkdependencies(p))
+        if (checkconstraints(p))
             parm[num].state = ROUTE_AWAITEXE;
         else
-            parm[num].state = ROUTE_AWAITDEP;
+            parm[num].state = ROUTE_AWAITCSTR;
     }
     else
     {

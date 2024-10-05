@@ -74,14 +74,14 @@ static void routeCmd(uint8_t argc, char *argv[])
     case 's':
         if (argc < 3)
         {
-            routenum_t      dep = 0, exe = 0, act = 0;
+            routenum_t      cstr = 0, exe = 0, act = 0;
 
             for (num = 0; num < MAXROUTES; num++)
             {
                 switch (route_state(num))
                 {
-                case ROUTE_AWAITDEP:
-                    dep++;
+                case ROUTE_AWAITCSTR:
+                    cstr++;
                     break;
                 case ROUTE_AWAITEXE:
                     exe++;
@@ -93,9 +93,9 @@ static void routeCmd(uint8_t argc, char *argv[])
                     break;
                 }
             }
-            printf_P(PSTR("Routes active:      %u\n"), act);
-            printf_P(PSTR("Await dependencies: %u\n"), dep);
-            printf_P(PSTR("Await execution:    %u\n"), exe);
+            printf_P(PSTR("Routes active:     %u\n"), act);
+            printf_P(PSTR("Await constraints: %u\n"), cstr);
+            printf_P(PSTR("Await execution:   %u\n"), exe);
         }
         else
         {
@@ -113,8 +113,8 @@ static void routeCmd(uint8_t argc, char *argv[])
                 case ROUTE_FREE:
                     printf_P(PSTR("FREE\n"));
                     break;
-                case ROUTE_AWAITDEP:
-                    printf_P(PSTR("AWAITDEP\n"));
+                case ROUTE_AWAITCSTR:
+                    printf_P(PSTR("AWAITCSTR\n"));
                     break;
                 case ROUTE_AWAITEXE:
                     printf_P(PSTR("AWAITEXE\n"));
