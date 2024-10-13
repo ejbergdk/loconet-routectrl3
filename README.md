@@ -19,8 +19,7 @@ This project is made with Microchip Studio (formerly Atmel Studio). It does **no
 The code is tested on a [AVR128DA48 Curiosity Nano](https://www.microchip.com/Developmenttools/ProductDetails/DM164151),
 but it should work on the entire AVR DA family, and possibly the AVR DB family too.
 
-Yes, I know. Documentation is non-existent right now. Work is in progress.
-It will appear in the [wiki](https://github.com/ejbergdk/loconet-routectrl3/wiki) on Github.
+Documentation is in the [wiki](https://github.com/ejbergdk/loconet-routectrl3/wiki).
 
 ### Note
 This repository uses submodules. Add **--recurse-submodules** when cloning the project:
