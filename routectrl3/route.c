@@ -299,7 +299,10 @@ void route_delay_cancel(routenum_t num)
 
 route_state_t route_state(routenum_t num)
 {
-    return parm[num].state;
+    if (num < MAXROUTES)
+        return parm[num].state;
+    else
+        return ROUTE_FREE;
 }
 
 bool route_exists(routenum_t num)
