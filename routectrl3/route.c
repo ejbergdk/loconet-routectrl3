@@ -13,6 +13,7 @@
 #include "fb_handler.h"
 #include "flashmem.h"
 #include "route.h"
+#include "route_delay.h"
 #include "route_queue.h"
 #include "switch_queue.h"
 #include "ticks.h"
@@ -94,6 +95,7 @@ void route_update(void)
     const FLASHMEM route_table_t *p;
 
     // Update sub-includes
+    route_delay_update();
     route_queue_update();
 
     // Check one route per update
@@ -264,37 +266,6 @@ void route_kill(routenum_t num)
 #endif
 
     parm[num].state = ROUTE_FREE;
-}
-
-
-/*
- * Offset to ctx for timer calls.
- * If timers are used for other purposes with real pointers to RAM,
- * make sure the ctx "pointers" used in route_delays does NOT
- * point to any valid RAM address.
- */
-#define TIMER_CTX_OFFSET 0x8000
-
-void route_delay_add(uint16_t timeout, timer_cb *cb, routenum_t num)
-{
-    uintptr_t       ref = num + TIMER_CTX_OFFSET;
-
-#ifdef ROUTE_DEBUG
-    printf_P(PSTR("Route %u add delay %u seconds\n"), num, timeout);
-#endif
-
-    timer_add(TICKS_FROM_SEC(timeout), cb, (void *)ref);
-}
-
-void route_delay_cancel(routenum_t num)
-{
-    uintptr_t       ref = num + TIMER_CTX_OFFSET;
-
-#ifdef ROUTE_DEBUG
-    printf_P(PSTR("Route %u cancel delay\n"), num);
-#endif
-
-    timer_delete((void *)ref);
 }
 
 route_state_t route_state(routenum_t num)
