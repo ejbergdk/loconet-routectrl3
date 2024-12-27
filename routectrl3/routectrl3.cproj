@@ -125,6 +125,9 @@
     <Compile Include="eeram.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="example_contact_bounce.c">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="fb_handler.c">
       <SubType>compile</SubType>
     </Compile>
