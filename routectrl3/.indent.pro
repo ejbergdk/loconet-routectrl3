@@ -9,3 +9,5 @@
 -T route_delay_cb
 -T swq_state_t
 -T timer_cb
+-T twim_cb
+-T uint8_t

@@ -264,6 +264,12 @@
     <Compile Include="lib\avr-shell-cmd\cmd.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="twim.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="twim.h">
+      <SubType>compile</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="lib\" />
