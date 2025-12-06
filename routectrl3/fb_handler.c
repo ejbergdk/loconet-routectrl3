@@ -94,6 +94,9 @@ static void fbCmd(uint8_t argc, char *argv[])
 CMD(fb, "Feedback");
 
 
+#if __GNUC__ < 15
+// Old compiler probably means old linker. Use linear search as table isn't numerically sorted
+
 static void feedback_callback(uint16_t adr, uint8_t l)
 {
     const FLASHMEM feedback_table_t *p, *pend;
@@ -124,6 +127,51 @@ static void feedback_callback(uint16_t adr, uint8_t l)
         p++;
     }
 }
+
+#else
+// Linker has sorted the table numerically. Use binary search
+
+static void feedback_callback(uint16_t adr, uint8_t l)
+{
+    const FLASHMEM feedback_table_t *p, *pend;
+    uint16_t        low, high, mid;
+
+    if (l != 0)                 // Occupied
+    {
+        p = &__loconet_fbocctable_start;
+        pend = &__loconet_fbocctable_end;
+    }
+    else                        // Free
+    {
+        p = &__loconet_fbfreetable_start;
+        pend = &__loconet_fbfreetable_end;
+    }
+    low = 0;
+    high = pend - p;
+
+    for (;;)
+    {
+        if (low >= high)
+        {
+            p = p + low;
+            break;
+        }
+        mid = low + ((high - low) >> 1);
+        if ((p + mid)->adr < adr)
+            low = mid + 1;
+        else
+            high = mid;
+    }
+
+    while (p < pend && p->adr == adr)
+    {
+        p->cb(adr);
+        p++;
+    }
+}
+
+#endif
+
 
 static void feedback_range_callback(uint16_t adr, uint8_t l)
 {

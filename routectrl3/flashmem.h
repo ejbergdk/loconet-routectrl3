@@ -12,7 +12,12 @@
 
 #ifdef __AVR_HAVE_ELPMX__
 // AVR supports ELPM with Z+ so tables may be located above 64KB. Use 24-bit pointer
+#if __GNUC__ >= 15
+// avr-gcc supports __flashx from version 15
+#define FLASHMEM __flashx
+#else
 #define FLASHMEM __memx
+#endif
 #else
 // AVR doesn't support data in flash above 64KB. Use normal 16-bit pointer
 #define FLASHMEM __flash
