@@ -53,7 +53,7 @@ typedef struct
 #define ROUTE(num, act, fre, can, ...) \
 static const FLASHMEM uint16_t routecstrs##num[] = { __VA_ARGS__ }; \
 static const route_table_t routeentry##num \
-__attribute__((used, section("loconet.routetable"))) = { \
+__attribute__((used, section("loconet.routetable." #num))) = { \
     .routenum = num, \
     .constraint_cnt = sizeof(routecstrs##num) / sizeof(routecstrs##num[0]), \
     .constraint = routecstrs##num, \

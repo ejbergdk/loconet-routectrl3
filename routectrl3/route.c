@@ -32,6 +32,9 @@ typedef struct
 static routeparm_t parm[MAXROUTES];
 
 
+#if __GNUC__ < 15
+// Old compiler probably means old linker. Use linear search as table isn't numerically sorted
+
 static const FLASHMEM route_table_t *getrouteentry(routenum_t num)
 {
     const FLASHMEM route_table_t *p = &__loconet_routetable_start;
@@ -45,6 +48,41 @@ static const FLASHMEM route_table_t *getrouteentry(routenum_t num)
 
     return NULL;
 }
+
+#else
+// Linker has sorted the table numerically. Use binary search
+
+static const FLASHMEM route_table_t *getrouteentry(routenum_t num)
+{
+    const FLASHMEM route_table_t *p, *pend;
+    uint16_t        low, high, mid;
+
+    p = &__loconet_routetable_start;
+    pend = &__loconet_routetable_end;
+    low = 0;
+    high = pend - p;
+
+    for (;;)
+    {
+        if (low >= high)
+        {
+            p = p + low;
+            break;
+        }
+        mid = low + ((high - low) >> 1);
+        if ((p + mid)->routenum < num)
+            low = mid + 1;
+        else
+            high = mid;
+    }
+
+    if (p < pend && p->routenum == num)
+        return p;
+
+    return NULL;
+}
+
+#endif
 
 static bool checkconstraints(const FLASHMEM route_table_t * rc)
 {

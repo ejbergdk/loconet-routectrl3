@@ -88,6 +88,9 @@ static void swsCmd(uint8_t argc, char *argv[])
 CMD(sws, "Switch state");
 
 
+#if __GNUC__ < 15
+// Old compiler probably means old linker. Use linear search as table isn't numerically sorted
+
 static void swreq_callback(uint16_t adr, bool dir)
 {
     const FLASHMEM switchreq_table_t *p, *pend;
@@ -110,6 +113,43 @@ static void swreq_callback(uint16_t adr, bool dir)
         p++;
     }
 }
+
+#else
+// Linker has sorted the table numerically. Use binary search
+
+static void swreq_callback(uint16_t adr, bool dir)
+{
+    const FLASHMEM switchreq_table_t *p, *pend;
+    uint16_t        low, high, mid;
+
+    p = &__loconet_swreqtable_start;
+    pend = &__loconet_swreqtable_end;
+    low = 0;
+    high = pend - p;
+
+    for (;;)
+    {
+        if (low >= high)
+        {
+            p = p + low;
+            break;
+        }
+        mid = low + ((high - low) >> 1);
+        if ((p + mid)->adr < adr)
+            low = mid + 1;
+        else
+            high = mid;
+    }
+
+    while (p < pend && p->adr == adr)
+    {
+        p->cb(adr, dir);
+        p++;
+    }
+}
+
+#endif
+
 
 static void swreq_range_callback(uint16_t adr, bool dir)
 {
