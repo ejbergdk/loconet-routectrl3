@@ -19,6 +19,7 @@
 typedef enum
 {
     TWIM_STATUS_DONE,
+    TWIM_STATUS_NODEVICE,
     TWIM_STATUS_ERROR
 } twim_status_t;
 
