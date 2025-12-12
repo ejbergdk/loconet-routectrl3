@@ -56,37 +56,23 @@
   <avrgcc.common.outputfiles.usersignatures>False</avrgcc.common.outputfiles.usersignatures>
   <avrgcc.compiler.general.ChangeDefaultCharTypeUnsigned>True</avrgcc.compiler.general.ChangeDefaultCharTypeUnsigned>
   <avrgcc.compiler.general.ChangeDefaultBitFieldUnsigned>True</avrgcc.compiler.general.ChangeDefaultBitFieldUnsigned>
-  <avrgcc.compiler.symbols.DefSymbols>
-    <ListValues>
-      <Value>F_CPU=24000000UL</Value>
-      <Value>LNPACKET_SIZE_MAX=6</Value>
-      <Value>LNPACKET_CNT=16</Value>
-      <Value>EXTXTAL</Value>
-      <Value>NDEBUG</Value>
-    </ListValues>
-  </avrgcc.compiler.symbols.DefSymbols>
-  <avrgcc.compiler.directories.IncludePaths>
-    <ListValues>
-      <Value>%24(ProjectDir)\lib\</Value>
-      <Value>%24(PackRepoDir)\Atmel\AVR-Dx_DFP\2.7.321\include\</Value>
-    </ListValues>
-  </avrgcc.compiler.directories.IncludePaths>
-  <avrgcc.compiler.optimization.level>Optimize (-O1)</avrgcc.compiler.optimization.level>
+  <avrgcc.compiler.symbols.DefSymbols><ListValues>
+  <Value>F_CPU=24000000UL</Value>
+  <Value>LNPACKET_SIZE_MAX=6</Value>
+  <Value>LNPACKET_CNT=16</Value>
+  <Value>EXTXTAL</Value>
+  <Value>CMD_ARGUMENTS_MAX=20</Value>
+  <Value>NDEBUG</Value>
+</ListValues></avrgcc.compiler.symbols.DefSymbols>
+  <avrgcc.compiler.directories.IncludePaths><ListValues><Value>%24(ProjectDir)\lib\</Value><Value>%24(PackRepoDir)\Atmel\AVR-Dx_DFP\2.7.321\include\</Value></ListValues></avrgcc.compiler.directories.IncludePaths>
   <avrgcc.compiler.optimization.PackStructureMembers>True</avrgcc.compiler.optimization.PackStructureMembers>
   <avrgcc.compiler.optimization.AllocateBytesNeededForEnum>True</avrgcc.compiler.optimization.AllocateBytesNeededForEnum>
   <avrgcc.compiler.warnings.AllWarnings>True</avrgcc.compiler.warnings.AllWarnings>
   <avrgcc.compiler.warnings.WarningsAsErrors>True</avrgcc.compiler.warnings.WarningsAsErrors>
-  <avrgcc.linker.libraries.Libraries>
-    <ListValues>
-      <Value>libm</Value>
-    </ListValues>
-  </avrgcc.linker.libraries.Libraries>
+  <avrgcc.linker.libraries.Libraries><ListValues><Value>libm</Value></ListValues></avrgcc.linker.libraries.Libraries>
   <avrgcc.linker.miscellaneous.LinkerFlags>-T %24(ProjectDir)\routetables.ld -T %24(ProjectDir)\lib\avr-shell-cmd\cmdtables.ld</avrgcc.linker.miscellaneous.LinkerFlags>
-  <avrgcc.assembler.general.IncludePaths>
-    <ListValues>
-      <Value>%24(PackRepoDir)\Atmel\AVR-Dx_DFP\2.7.321\include\</Value>
-    </ListValues>
-  </avrgcc.assembler.general.IncludePaths>
+  <avrgcc.assembler.general.IncludePaths><ListValues><Value>%24(PackRepoDir)\Atmel\AVR-Dx_DFP\2.7.321\include\</Value></ListValues></avrgcc.assembler.general.IncludePaths>
+  <avrgcc.compiler.optimization.level>Optimize (-O1)</avrgcc.compiler.optimization.level>
 </AvrGcc>
     </ToolchainSettings>
   </PropertyGroup>
@@ -101,41 +87,27 @@
   <avrgcc.common.outputfiles.usersignatures>False</avrgcc.common.outputfiles.usersignatures>
   <avrgcc.compiler.general.ChangeDefaultCharTypeUnsigned>True</avrgcc.compiler.general.ChangeDefaultCharTypeUnsigned>
   <avrgcc.compiler.general.ChangeDefaultBitFieldUnsigned>True</avrgcc.compiler.general.ChangeDefaultBitFieldUnsigned>
-  <avrgcc.compiler.symbols.DefSymbols>
-    <ListValues>
-      <Value>F_CPU=24000000UL</Value>
-      <Value>LNPACKET_SIZE_MAX=6</Value>
-      <Value>LNPACKET_CNT=16</Value>
-      <Value>EXTXTAL</Value>
-      <Value>DEBUG</Value>
-      <Value>LNSTAT</Value>
-      <Value>ROUTE_DEBUG</Value>
-    </ListValues>
-  </avrgcc.compiler.symbols.DefSymbols>
-  <avrgcc.compiler.directories.IncludePaths>
-    <ListValues>
-      <Value>%24(ProjectDir)\lib\</Value>
-      <Value>%24(PackRepoDir)\Atmel\AVR-Dx_DFP\2.7.321\include\</Value>
-    </ListValues>
-  </avrgcc.compiler.directories.IncludePaths>
-  <avrgcc.compiler.optimization.level>Optimize debugging experience (-Og)</avrgcc.compiler.optimization.level>
-  <avrgcc.compiler.optimization.OtherFlags>-gdwarf-2</avrgcc.compiler.optimization.OtherFlags>
+  <avrgcc.compiler.symbols.DefSymbols><ListValues>
+  <Value>F_CPU=24000000UL</Value>
+  <Value>LNPACKET_SIZE_MAX=6</Value>
+  <Value>LNPACKET_CNT=16</Value>
+  <Value>EXTXTAL</Value>
+  <Value>CMD_ARGUMENTS_MAX=20</Value>
+  <Value>DEBUG</Value>
+  <Value>LNSTAT</Value>
+  <Value>ROUTE_DEBUG</Value>
+</ListValues></avrgcc.compiler.symbols.DefSymbols>
+  <avrgcc.compiler.directories.IncludePaths><ListValues><Value>%24(ProjectDir)\lib\</Value><Value>%24(PackRepoDir)\Atmel\AVR-Dx_DFP\2.7.321\include\</Value></ListValues></avrgcc.compiler.directories.IncludePaths>
   <avrgcc.compiler.optimization.PackStructureMembers>True</avrgcc.compiler.optimization.PackStructureMembers>
   <avrgcc.compiler.optimization.AllocateBytesNeededForEnum>True</avrgcc.compiler.optimization.AllocateBytesNeededForEnum>
-  <avrgcc.compiler.optimization.DebugLevel>Default (-g2)</avrgcc.compiler.optimization.DebugLevel>
   <avrgcc.compiler.warnings.AllWarnings>True</avrgcc.compiler.warnings.AllWarnings>
   <avrgcc.compiler.warnings.WarningsAsErrors>True</avrgcc.compiler.warnings.WarningsAsErrors>
-  <avrgcc.linker.libraries.Libraries>
-    <ListValues>
-      <Value>libm</Value>
-    </ListValues>
-  </avrgcc.linker.libraries.Libraries>
+  <avrgcc.linker.libraries.Libraries><ListValues><Value>libm</Value></ListValues></avrgcc.linker.libraries.Libraries>
   <avrgcc.linker.miscellaneous.LinkerFlags>-T %24(ProjectDir)\routetables.ld -T %24(ProjectDir)\lib\avr-shell-cmd\cmdtables.ld</avrgcc.linker.miscellaneous.LinkerFlags>
-  <avrgcc.assembler.general.IncludePaths>
-    <ListValues>
-      <Value>%24(PackRepoDir)\Atmel\AVR-Dx_DFP\2.7.321\include\</Value>
-    </ListValues>
-  </avrgcc.assembler.general.IncludePaths>
+  <avrgcc.assembler.general.IncludePaths><ListValues><Value>%24(PackRepoDir)\Atmel\AVR-Dx_DFP\2.7.321\include\</Value></ListValues></avrgcc.assembler.general.IncludePaths>
+  <avrgcc.compiler.optimization.level>Optimize debugging experience (-Og)</avrgcc.compiler.optimization.level>
+  <avrgcc.compiler.optimization.OtherFlags>-gdwarf-2</avrgcc.compiler.optimization.OtherFlags>
+  <avrgcc.compiler.optimization.DebugLevel>Default (-g2)</avrgcc.compiler.optimization.DebugLevel>
   <avrgcc.assembler.debugging.DebugLevel>Default (-Wa,-g)</avrgcc.assembler.debugging.DebugLevel>
 </AvrGcc>
     </ToolchainSettings>
@@ -262,6 +234,12 @@
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="lib\avr-shell-cmd\cmd.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="twim.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="twim.h">
       <SubType>compile</SubType>
     </Compile>
   </ItemGroup>

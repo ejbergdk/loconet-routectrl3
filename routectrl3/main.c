@@ -14,6 +14,7 @@
 #include "term.h"
 #include "ticks.h"
 #include "timer.h"
+#include "twim.h"
 #include "lib/loconet-avrda/hal_ln.h"
 #include "lib/loconet-avrda/ln_rx.h"
 
@@ -41,6 +42,7 @@ int main(void)
 
     term_init();
     ticks_init();
+    twim_init();
     hal_ln_init();
     ln_rx_init();
     collision_check_init();
@@ -52,6 +54,7 @@ int main(void)
     while (1)
     {
         term_update();
+        twim_update();
         hal_ln_update();
         ln_rx_update();
         timer_update();
