@@ -18,16 +18,17 @@
 typedef enum
 {
     TWIM_STATE_IDLE,
-    TWIM_STATE_TXADR,
-    TWIM_STATE_TXDATA,
-    TWIM_STATE_RXDATA
+    TWIM_STATE_WADR,
+    TWIM_STATE_WDATA,
+    TWIM_STATE_RDATA
 } twim_state_t;
 
 
 static twim_cb *callback = NULL;
-static const uint8_t *ptx;
-static uint8_t *prx;
-static uint8_t  txcount, rxcount, rxadr;
+static const uint8_t *pwbuf;
+static uint8_t *prbuf;
+static uint16_t wcount, rcount;
+static uint8_t  radr;
 static twim_status_t twi_status;
 static twim_state_t twi_state = TWIM_STATE_IDLE;
 
@@ -60,45 +61,45 @@ bool twim_ready(void)
 }
 
 
-bool twim_send(uint8_t adr, const uint8_t *buf, uint8_t len, twim_cb *cb)
+bool twim_write(uint8_t adr, const uint8_t *buf, uint16_t len, twim_cb *cb)
 {
     if (!twim_ready())
         return false;
     callback = cb;
-    ptx = buf;
-    txcount = len;
-    rxcount = 0;
-    twi_state = TWIM_STATE_TXADR;
+    pwbuf = buf;
+    wcount = len;
+    rcount = 0;
+    twi_state = TWIM_STATE_WADR;
     TWI0.MADDR = adr & 0xfe;
     return true;
 }
 
 
-bool twim_recv(uint8_t adr, uint8_t *buf, uint8_t len, twim_cb *cb)
+bool twim_read(uint8_t adr, uint8_t *buf, uint16_t len, twim_cb *cb)
 {
     if (!twim_ready())
         return false;
     callback = cb;
-    prx = buf;
-    txcount = 0;
-    rxcount = len;
-    twi_state = TWIM_STATE_TXADR;
+    prbuf = buf;
+    wcount = 0;
+    rcount = len;
+    twi_state = TWIM_STATE_WADR;
     TWI0.MADDR = adr | 0x01;
     return true;
 }
 
 
-bool twim_send_recv(uint8_t adr, const uint8_t *txbuf, uint8_t txlen, uint8_t *rxbuf, uint8_t rxlen, twim_cb *cb)
+bool twim_write_read(uint8_t adr, const uint8_t *wbuf, uint16_t wlen, uint8_t *rbuf, uint16_t rlen, twim_cb *cb)
 {
     if (!twim_ready())
         return false;
     callback = cb;
-    ptx = txbuf;
-    prx = rxbuf;
-    txcount = txlen;
-    rxcount = rxlen;
-    rxadr = adr | 0x01;
-    twi_state = TWIM_STATE_TXADR;
+    pwbuf = wbuf;
+    prbuf = rbuf;
+    wcount = wlen;
+    rcount = rlen;
+    radr = adr | 0x01;
+    twi_state = TWIM_STATE_WADR;
     TWI0.MADDR = adr & 0xfe;
     return true;
 }
@@ -110,7 +111,7 @@ ISR(TWI0_TWIM_vect)
 
     if (status & TWI_WIF_bm)
     {
-        if ((status & TWI_RXACK_bm) && (twi_state == TWIM_STATE_TXADR))
+        if ((status & TWI_RXACK_bm) && (twi_state == TWIM_STATE_WADR))
         {
             // No device responded on the given address
             twi_status = TWIM_STATUS_NODEVICE;
@@ -126,14 +127,14 @@ ISR(TWI0_TWIM_vect)
             return;
         }
         // Write successful
-        twi_state = TWIM_STATE_TXDATA;
-        if (txcount)
+        twi_state = TWIM_STATE_WDATA;
+        if (wcount)
         {
             // More data to send
             if (!(status & TWI_RXACK_bm))
             {
-                TWI0.MDATA = *ptx++;
-                txcount--;
+                TWI0.MDATA = *pwbuf++;
+                wcount--;
             }
             else
             {
@@ -145,11 +146,11 @@ ISR(TWI0_TWIM_vect)
             return;
         }
         // No more data to send. Should we receive data?
-        if (rxcount)
+        if (rcount)
         {
             // Send repeated start to initiate reception
-            twi_state = TWIM_STATE_TXADR;
-            TWI0.MADDR = rxadr;
+            twi_state = TWIM_STATE_WADR;
+            TWI0.MADDR = radr;
         }
         else
         {
@@ -162,9 +163,9 @@ ISR(TWI0_TWIM_vect)
     }
     if (status & TWI_RIF_bm)
     {
-        twi_state = TWIM_STATE_RXDATA;
-        *prx++ = TWI0.MDATA;
-        if (--rxcount)
+        twi_state = TWIM_STATE_RDATA;
+        *prbuf++ = TWI0.MDATA;
+        if (--rcount)
         {
             // More data to receive
             TWI0.MCTRLB = TWI_ACKACT_ACK_gc | TWI_MCMD_RECVTRANS_gc;
@@ -222,9 +223,9 @@ static void twiCmd(uint8_t argc, char *argv[])
     if (argc < 4)
     {
         printf_P(PSTR("Missing argument\nArguments:\n"));
-        printf_P(PSTR(" t <adr> <data1> [<datan>]         - Tx packet\n"));
-        printf_P(PSTR(" r <adr> <len>                     - Rx packet\n"));
-        printf_P(PSTR(" x <adr> <rxlen> <data1> [<datan>] - Tx and Rx packet\n"));
+        printf_P(PSTR(" w <adr> <data1> [<datan>]         - Write packet\n"));
+        printf_P(PSTR(" r <adr> <len>                     - Read packet\n"));
+        printf_P(PSTR(" x <adr> <rxlen> <data1> [<datan>] - Write and read packet\n"));
         return;
     }
 
@@ -232,14 +233,14 @@ static void twiCmd(uint8_t argc, char *argv[])
 
     switch (argv[1][0])
     {
-    case 't':
+    case 'w':
         {
             uint8_t         len = argc - 3;
 
             for (uint8_t i = 0; i < len; i++)
                 debug_buf[i] = strtoul(argv[i + 3], NULL, 0);
             debug_len = 0;
-            if (!twim_send(adr, debug_buf, len, twi_debug_cb))
+            if (!twim_write(adr, debug_buf, len, twi_debug_cb))
                 printf_P(PSTR("ERROR\n"));
             break;
         }
@@ -247,7 +248,7 @@ static void twiCmd(uint8_t argc, char *argv[])
     case 'r':
         {
             debug_len = strtoul(argv[3], NULL, 0);
-            if (!twim_recv(adr, debug_buf, debug_len, twi_debug_cb))
+            if (!twim_read(adr, debug_buf, debug_len, twi_debug_cb))
             {
                 debug_len = 0;
                 printf_P(PSTR("ERROR\n"));
@@ -261,18 +262,19 @@ static void twiCmd(uint8_t argc, char *argv[])
 
             if (len == 0)
             {
-                printf_P(PSTR("No tx data\n"));
+                printf_P(PSTR("No write data\n"));
                 break;
             }
             for (uint8_t i = 0; i < len; i++)
                 debug_buf[i] = strtoul(argv[i + 4], NULL, 0);
             debug_len = strtoul(argv[3], NULL, 0);
-            if (!twim_send_recv(adr, debug_buf, len, debug_buf, debug_len, twi_debug_cb))
+            if (!twim_write_read(adr, debug_buf, len, debug_buf, debug_len, twi_debug_cb))
                 printf_P(PSTR("ERROR\n"));
             break;
         }
 
     default:
+        printf_P(PSTR("Unknown argument\n"));
         break;
     }
 }

@@ -51,19 +51,19 @@ extern void     twim_update(void);
 extern bool     twim_ready(void);
 
 /*
- * Send data to TWI
+ * Write data to TWI
  *
  * @param adr   Address (8-bit, already left-shifted).
- * @param buf   Ptr to data to send. Must be available until callback is called.
- * @param len   Length of data to send.
+ * @param buf   Ptr to data to write. Must be available until callback is called.
+ * @param len   Length of data to write.
  * @param cb    Function callback with status when transaction is done.
  *
  * @return      True if started successfully (wait for callback), false if not (no callback).
  */
-extern bool     twim_send(uint8_t adr, const uint8_t *buf, uint8_t len, twim_cb *cb);
+extern bool     twim_write(uint8_t adr, const uint8_t *buf, uint16_t len, twim_cb *cb);
 
 /*
- * Receive data from TWI
+ * Read data from TWI
  *
  * @param adr   Address (8-bit, already left-shifted).
  * @param buf   Ptr for received data.
@@ -72,21 +72,21 @@ extern bool     twim_send(uint8_t adr, const uint8_t *buf, uint8_t len, twim_cb 
  *
  * @return      True if started successfully (wait for callback), false if not (no callback).
  */
-extern bool     twim_recv(uint8_t adr, uint8_t *buf, uint8_t len, twim_cb *cb);
+extern bool     twim_read(uint8_t adr, uint8_t *buf, uint16_t len, twim_cb *cb);
 
 /*
- * Send and receive data on TWI
+ * Write and read data on TWI (using repeated start)
  *
  * @param adr   Address (8-bit, already left-shifted).
- * @param txbuf Ptr to data to send. Must be available until callback is called.
- * @param txlen Length of data to send.
- * @param rxbuf Ptr for received data.
- * @param rxlen Length of data to receive.
+ * @param wbuf  Ptr to data to write. Must be available until callback is called.
+ * @param wlen  Length of data to write.
+ * @param rbuf  Ptr for received data.
+ * @param rlen  Length of data to receive.
  * @param cb    Function callback with status when transaction is done.
  *
  * @return      True if started successfully (wait for callback), false if not (no callback).
  */
-extern bool     twim_send_recv(uint8_t adr, const uint8_t *txbuf, uint8_t txlen, uint8_t *rxbuf, uint8_t rxlen,
-                               twim_cb *cb);
+extern bool     twim_write_read(uint8_t adr, const uint8_t *wbuf, uint16_t wlen, uint8_t *rbuf, uint16_t rlen,
+                                twim_cb *cb);
 
 #endif /* TWIM_H_ */
