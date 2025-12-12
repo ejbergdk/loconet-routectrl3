@@ -1,6 +1,10 @@
 /*
  * twim.h
  *
+ * TWI master driver for AVR DA.
+ * Interrupt driven.
+ * Not tested in a multi-master setup.
+ *
  * Created: 21-09-2025 12:58:08
  *  Author: Mikael Ejberg Pedersen
  */
