@@ -62,6 +62,7 @@
   <Value>LNPACKET_CNT=16</Value>
   <Value>EXTXTAL</Value>
   <Value>CMD_ARGUMENTS_MAX=20</Value>
+  <Value>EERAM</Value>
   <Value>NDEBUG</Value>
 </ListValues></avrgcc.compiler.symbols.DefSymbols>
   <avrgcc.compiler.directories.IncludePaths><ListValues><Value>%24(ProjectDir)\lib\</Value><Value>%24(PackRepoDir)\Atmel\AVR-Dx_DFP\2.7.321\include\</Value></ListValues></avrgcc.compiler.directories.IncludePaths>
@@ -93,6 +94,7 @@
   <Value>LNPACKET_CNT=16</Value>
   <Value>EXTXTAL</Value>
   <Value>CMD_ARGUMENTS_MAX=20</Value>
+  <Value>EERAM</Value>
   <Value>DEBUG</Value>
   <Value>LNSTAT</Value>
   <Value>ROUTE_DEBUG</Value>
@@ -117,6 +119,12 @@
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="collision_check.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="eeram.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="eeram.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="fb_handler.c">

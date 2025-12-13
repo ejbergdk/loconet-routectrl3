@@ -3,6 +3,7 @@
  *
  * Switch handler.
  * Receives OPC_SW_REQ from Loconet and calls switch subscribers.
+ * If EERAM is defined: Will keep switch states in nonvolatile memory.
  *
  * Created: 29-01-2024 16:31:54
  *  Author: Mikael Ejberg Pedersen
@@ -19,6 +20,10 @@
 #include "lib/loconet-avrda/hal_ln.h"
 #include "lib/loconet-avrda/ln_rx.h"
 
+#ifdef EERAM
+#include "eeram.h"
+#endif
+
 #ifndef SW_ADR_MAX
 #define SW_ADR_MAX 2048
 #endif
@@ -26,12 +31,28 @@
 #define SW_ARRAY_SIZE ((SW_ADR_MAX + 7) / 8)
 
 static uint8_t  sw_state[SW_ARRAY_SIZE];
-static const __flash uint8_t adr_mask[] = { 1, 2, 4, 8, 16, 32, 64, 128 };
 
 extern const FLASHMEM switchreq_table_t __loconet_swreqtable_start;
 extern const FLASHMEM switchreq_table_t __loconet_swreqtable_end;
 extern const FLASHMEM swreqrange_table_t __loconet_swreqrangetable_start;
 extern const FLASHMEM swreqrange_table_t __loconet_swreqrangetable_end;
+
+
+void sw_handler_update(void)
+{
+#ifdef EERAM
+    static bool     init_done = false;
+
+    if (!init_done && eeram_ready())
+    {
+        if (eeram_read(0, sw_state, sizeof(sw_state)))
+        {
+            printf_P(PSTR("Reading SW states\n"));
+            init_done = true;
+        }
+    }
+#endif
+}
 
 
 void sw_handler_set_state(uint16_t adr, bool dir)
@@ -44,11 +65,14 @@ void sw_handler_set_state(uint16_t adr, bool dir)
 
     adr--;
     idx = adr / 8;
-    mask = adr_mask[adr & 7];
+    mask = __builtin_avr_mask1(1, adr & 7);
     if (dir)                    // G
         sw_state[idx] |= mask;
     else                        // R
         sw_state[idx] &= ~mask;
+#ifdef EERAM
+    eeram_write(idx, sw_state[idx]);
+#endif
 }
 
 
@@ -62,7 +86,7 @@ bool sw_handler_get_state(uint16_t adr)
 
     adr--;
     idx = adr / 8;
-    mask = adr_mask[adr & 7];
+    mask = __builtin_avr_mask1(1, adr & 7);
     return (sw_state[idx] & mask) != 0;
 }
 
