@@ -10,13 +10,18 @@
 #include "collision_check.h"
 #include "mmi.h"
 #include "route.h"
+#include "sw_handler.h"
 #include "switch_queue.h"
 #include "term.h"
 #include "ticks.h"
 #include "timer.h"
-#include "twim.h"
 #include "lib/loconet-avrda/hal_ln.h"
 #include "lib/loconet-avrda/ln_rx.h"
+
+#ifdef EERAM
+#include "eeram.h"
+#include "twim.h"
+#endif
 
 __attribute__((OS_main))
 int main(void)
@@ -42,7 +47,10 @@ int main(void)
 
     term_init();
     ticks_init();
+#ifdef EERAM
     twim_init();
+    eeram_init();
+#endif
     hal_ln_init();
     ln_rx_init();
     collision_check_init();
@@ -54,12 +62,16 @@ int main(void)
     while (1)
     {
         term_update();
+#ifdef EERAM
         twim_update();
+        eeram_update();
+#endif
         hal_ln_update();
         ln_rx_update();
         timer_update();
         collision_check_update();
         switch_queue_update();
+        sw_handler_update();
         mmi_update();
         route_update();
     }

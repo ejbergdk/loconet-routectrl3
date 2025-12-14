@@ -68,6 +68,13 @@ typedef struct
 
 
 /**
+ * Update switch handler module.
+ *
+ * Call regularly from mainloop.
+ */
+extern void     sw_handler_update(void);
+
+/**
  * Set state of switch address.
  *
  * Calling this function does NOT send a Loconet packet.

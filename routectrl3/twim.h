@@ -17,7 +17,7 @@
 #include <stdint.h>
 
 
-/*
+/**
  * TWIM status
  */
 typedef enum
@@ -27,34 +27,36 @@ typedef enum
     TWIM_STATUS_ERROR
 } twim_status_t;
 
-/*
+/**
  * TWIM callback function prototype.
+ *
+ * NOTE: Do NOT start a new TWI read or write from within this callback.
  */
 typedef void    (twim_cb) (twim_status_t);
 
 
-/*
+/**
  * Init TWI master module.
  *
  * Call once at startup.
  */
 extern void     twim_init(void);
 
-/*
+/**
  * Update TWI master module.
  *
  * Call regularly from mainloop.
  */
 extern void     twim_update(void);
 
-/*
+/**
  * TWIM ready or busy.
  *
  * @return      True if ready for a new transaction.
  */
 extern bool     twim_ready(void);
 
-/*
+/**
  * Write data to TWI
  *
  * @param adr   Address (8-bit, already left-shifted).
@@ -66,7 +68,7 @@ extern bool     twim_ready(void);
  */
 extern bool     twim_write(uint8_t adr, const uint8_t *buf, uint16_t len, twim_cb *cb);
 
-/*
+/**
  * Read data from TWI
  *
  * @param adr   Address (8-bit, already left-shifted).
@@ -78,7 +80,7 @@ extern bool     twim_write(uint8_t adr, const uint8_t *buf, uint16_t len, twim_c
  */
 extern bool     twim_read(uint8_t adr, uint8_t *buf, uint16_t len, twim_cb *cb);
 
-/*
+/**
  * Write and read data on TWI (using repeated start)
  *
  * @param adr   Address (8-bit, already left-shifted).

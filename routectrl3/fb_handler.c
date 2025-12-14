@@ -26,8 +26,6 @@
 #define FB_ARRAY_SIZE ((FEEDBACK_ADR_MAX + 7) / 8)
 
 static uint8_t  feedback_state[FB_ARRAY_SIZE];
-static const __flash uint8_t adr_mask[] = { 1, 2, 4, 8, 16, 32, 64, 128 };
-
 static uint16_t feedback_cnt = 0;
 
 extern const FLASHMEM feedback_table_t __loconet_fbocctable_start;
@@ -50,7 +48,7 @@ void fb_handler_set_state(uint16_t adr, bool l)
 
     adr--;
     idx = adr / 8;
-    mask = adr_mask[adr & 7];
+    mask = __builtin_avr_mask1(1, adr & 7);
     if (l)                      // Occupied
         feedback_state[idx] |= mask;
     else                        // Free
@@ -68,7 +66,7 @@ bool fb_handler_get_state(uint16_t adr)
 
     adr--;
     idx = adr / 8;
-    mask = adr_mask[adr & 7];
+    mask = __builtin_avr_mask1(1, adr & 7);
     return (feedback_state[idx] & mask) != 0;
 }
 

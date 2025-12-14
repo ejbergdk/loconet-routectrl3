@@ -36,11 +36,11 @@ static uint8_t  radr;
 static twim_status_t twi_status;
 static twim_state_t twi_state = TWIM_STATE_IDLE;
 
+
 void twim_init(void)
 {
     // Init port pins (Errata 2.12.1: Clear port pins before enabling twi)
     PORTA.OUTCLR = PIN2_bm | PIN3_bm;
-    PORTA.DIRSET = PIN2_bm | PIN3_bm;
     TWI0.CTRLA = 0;             // I2C mode, no fast mode plus
     TWI0.DUALCTRL = 0;
     TWI0.MBAUD = TWI_BAUD;
