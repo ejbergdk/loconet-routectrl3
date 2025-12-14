@@ -179,12 +179,14 @@ void eeram_update(void)
         if (writestack_cnt > 0 && twim_ready())
         {
             // Write new byte to EERAM
-            buffer[0] = writestack[writestack_cnt].adr >> 8;    // High byte first
-            buffer[1] = writestack[writestack_cnt].adr & 0xff;
-            buffer[2] = writestack[writestack_cnt].data;
+            uint8_t         i = writestack_cnt - 1;
+
+            buffer[0] = writestack[i].adr >> 8; // High byte first
+            buffer[1] = writestack[i].adr & 0xff;
+            buffer[2] = writestack[i].data;
             if (twim_write(EERAM_SRAM_ADR, buffer, 3, twi_done_cb))
             {
-                writestack_cnt--;
+                writestack_cnt = i;
                 tstart = ticks_get();
                 state = EERAM_STATE_BUSY;
             }

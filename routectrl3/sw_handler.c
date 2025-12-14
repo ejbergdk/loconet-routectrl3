@@ -58,7 +58,7 @@ void sw_handler_update(void)
 void sw_handler_set_state(uint16_t adr, bool dir)
 {
     uint16_t        idx;
-    uint8_t         mask;
+    uint8_t         mask, val;
 
     if (adr == 0 || adr > SW_ADR_MAX)
         return;
@@ -66,13 +66,18 @@ void sw_handler_set_state(uint16_t adr, bool dir)
     adr--;
     idx = adr / 8;
     mask = __builtin_avr_mask1(1, adr & 7);
+    val = sw_state[idx];
     if (dir)                    // G
-        sw_state[idx] |= mask;
+        val |= mask;
     else                        // R
-        sw_state[idx] &= ~mask;
+        val &= ~mask;
+    if (val != sw_state[idx])
+    {
+        sw_state[idx] = val;
 #ifdef EERAM
-    eeram_write(idx, sw_state[idx]);
+        eeram_write(idx, sw_state[idx]);
 #endif
+    }
 }
 
 

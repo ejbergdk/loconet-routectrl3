@@ -17,7 +17,7 @@
 #include "twim.h"
 
 
-#define TWI_BAUD 27             // 115 = 100 kHz. 27 = 400 kHz. Only valid if F_CPU is 24 MHz
+#define TWI_BAUD 115            // 115 = 100 kHz. 27 = 400 kHz. Only valid if F_CPU is 24 MHz
 
 typedef enum
 {
