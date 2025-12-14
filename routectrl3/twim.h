@@ -27,7 +27,7 @@ typedef enum
     TWIM_STATUS_ERROR
 } twim_status_t;
 
-/*
+/**
  * TWIM callback function prototype.
  *
  * NOTE: Do NOT start a new TWI read or write from within this callback.
