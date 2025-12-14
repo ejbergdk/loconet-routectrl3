@@ -75,7 +75,7 @@ void sw_handler_set_state(uint16_t adr, bool dir)
     {
         sw_state[idx] = val;
 #ifdef EERAM
-        eeram_write(idx, sw_state[idx]);
+        eeram_write(idx, val);
 #endif
     }
 }
