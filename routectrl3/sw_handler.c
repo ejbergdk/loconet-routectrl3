@@ -3,7 +3,7 @@
  *
  * Switch handler.
  * Receives OPC_SW_REQ from Loconet and calls switch subscribers.
- * If EERAM is defined: Will keep switch states in nonvolatile memory.
+ * If NVRAM is defined: Will keep switch states in nonvolatile memory.
  *
  * Created: 29-01-2024 16:31:54
  *  Author: Mikael Ejberg Pedersen
@@ -20,8 +20,8 @@
 #include "lib/loconet-avrda/hal_ln.h"
 #include "lib/loconet-avrda/ln_rx.h"
 
-#ifdef EERAM
-#include "eeram.h"
+#ifdef NVRAM
+#include "nvram.h"
 #endif
 
 #ifndef SW_ADR_MAX
@@ -40,12 +40,12 @@ extern const FLASHMEM swreqrange_table_t __loconet_swreqrangetable_end;
 
 void sw_handler_update(void)
 {
-#ifdef EERAM
+#ifdef NVRAM
     static bool     init_done = false;
 
-    if (!init_done && eeram_ready())
+    if (!init_done && nvram_ready())
     {
-        if (eeram_read(0, sw_state, sizeof(sw_state)))
+        if (nvram_read(0, sw_state, sizeof(sw_state)))
         {
             printf_P(PSTR("Reading SW states\n"));
             init_done = true;
@@ -74,8 +74,8 @@ void sw_handler_set_state(uint16_t adr, bool dir)
     if (val != sw_state[idx])
     {
         sw_state[idx] = val;
-#ifdef EERAM
-        eeram_write(idx, val);
+#ifdef NVRAM
+        nvram_write(idx, val);
 #endif
     }
 }

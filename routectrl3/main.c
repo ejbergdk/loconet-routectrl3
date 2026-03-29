@@ -18,8 +18,8 @@
 #include "lib/loconet-avrda/hal_ln.h"
 #include "lib/loconet-avrda/ln_rx.h"
 
-#ifdef EERAM
-#include "eeram.h"
+#ifdef NVRAM
+#include "nvram.h"
 #include "twim.h"
 #endif
 
