@@ -8,6 +8,10 @@
  *
  * Created: 13-12-2025 13:50:06
  *  Author: Mikael Ejberg Pedersen
+ *
+ * If used with MB85RC04 or MB85RC16, define NVRAM_BYTEADR
+ * due to single-byte address scheme in these chips.
+ * For all other EERAM or FRAM, do NOT define NVRAM_BYTEADR.
  */
 
 

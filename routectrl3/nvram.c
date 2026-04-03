@@ -19,11 +19,17 @@
 #include "twim.h"
 
 
-#define EERAM_CTRL_ADR 0x30
-#define EERAM_SRAM_ADR 0xa0
+// Address used by both EERAM and FRAM
+#define NVRAM_SRAM_ADR 0xa0
 
-#define CTRL_STATUS    0x00
-#define CTRL_COMMAND   0x55
+// EERAM specific address
+#define EERAM_CTRL_ADR 0x30
+
+#define EERAM_CTRL_STATUS  0x00
+#define EERAM_CTRL_COMMAND 0x55
+
+// FRAM specific address
+#define FRAM_DEVID_ADR 0xf8
 
 #define TWI_TIMEOUT    TICKS_FROM_MS(500)
 
@@ -53,7 +59,7 @@ typedef struct
 typedef enum
 {
     NVRAM_STATE_INIT,
-    NVRAM_STATE_SET_ASE,
+    NVRAM_STATE_EERAM_SET_ASE,
     NVRAM_STATE_IDLE,
     NVRAM_STATE_BUSY,
     NVRAM_STATE_ERROR
@@ -88,7 +94,7 @@ static void print_twi_error(twim_status_t ts)
     }
 }
 
-static void status_cb(twim_status_t ts)
+static void eeram_status_cb(twim_status_t ts)
 {
     if (ts == TWIM_STATUS_DONE)
     {
@@ -104,8 +110,13 @@ static void status_cb(twim_status_t ts)
         else
         {
             // Need to enable auto-store for EERAM to work properly
-            state = NVRAM_STATE_SET_ASE;
+            state = NVRAM_STATE_EERAM_SET_ASE;
         }
+    }
+    else if (ts == TWIM_STATUS_NODEVICE)
+    {
+        printf_P(PSTR("EERAM not detected. Assuming FRAM\n"));
+        state = NVRAM_STATE_IDLE;
     }
     else
     {
@@ -115,7 +126,7 @@ static void status_cb(twim_status_t ts)
 }
 
 
-static void set_ase_cb(twim_status_t ts)
+static void eeram_set_ase_cb(twim_status_t ts)
 {
     if (ts == TWIM_STATUS_DONE)
     {
@@ -154,22 +165,23 @@ void nvram_update(void)
     switch (state)
     {
     case NVRAM_STATE_INIT:
-        if (twim_read(EERAM_CTRL_ADR, buffer, sizeof(eeram_buf_status_t), status_cb))
+        // Try EERAM CTRL address
+        if (twim_read(EERAM_CTRL_ADR, buffer, sizeof(eeram_buf_status_t), eeram_status_cb))
         {
             tstart = ticks_get();
             state = NVRAM_STATE_BUSY;
         }
         break;
 
-    case NVRAM_STATE_SET_ASE:
+    case NVRAM_STATE_EERAM_SET_ASE:
         {
             eeram_buf_status_t status;
 
             status.data = buffer[0];
             status.bit.ase = 1;
-            buffer[0] = CTRL_STATUS;
+            buffer[0] = EERAM_CTRL_STATUS;
             buffer[1] = status.data;
-            if (twim_write(EERAM_CTRL_ADR, buffer, 2, set_ase_cb))
+            if (twim_write(EERAM_CTRL_ADR, buffer, 2, eeram_set_ase_cb))
             {
                 tstart = ticks_get();
                 state = NVRAM_STATE_BUSY;
@@ -182,11 +194,20 @@ void nvram_update(void)
         {
             // Write new byte to NVRAM
             uint8_t         i = writestack_cnt - 1;
+            bool            success;
 
+#if NVRAM_BYTEADR
+            // High byte of address is embedded in chip address
+            buffer[0] = writestack[i].adr & 0xff;
+            buffer[1] = writestack[i].data;
+            success = twim_write(NVRAM_SRAM_ADR + ((writestack[i].adr >> 7) & 0x0e), buffer, 2, twi_done_cb);
+#else
             buffer[0] = writestack[i].adr >> 8; // High byte first
             buffer[1] = writestack[i].adr & 0xff;
             buffer[2] = writestack[i].data;
-            if (twim_write(EERAM_SRAM_ADR, buffer, 3, twi_done_cb))
+            success = twim_write(NVRAM_SRAM_ADR, buffer, 3, twi_done_cb);
+#endif
+            if (success)
             {
                 writestack_cnt = i;
                 tstart = ticks_get();
@@ -218,11 +239,21 @@ bool nvram_ready(void)
 
 bool nvram_read(uint16_t adr, uint8_t *buf, uint16_t len)
 {
+    bool success;
+
     if (!nvram_ready() || !twim_ready())
         return false;
+
+#if NVRAM_BYTEADR
+    // High byte of address is embedded in chip address
+    buffer[0] = adr & 0xff;
+    success = twim_write_read(NVRAM_SRAM_ADR + ((adr >> 7) & 0x0e), buffer, 1, buf, len, twi_done_cb);
+#else
     buffer[0] = adr >> 8;       // High byte first
     buffer[1] = adr & 0xff;     // Low byte
-    if (twim_write_read(EERAM_SRAM_ADR, buffer, 2, buf, len, twi_done_cb))
+    success = twim_write_read(NVRAM_SRAM_ADR, buffer, 2, buf, len, twi_done_cb);
+#endif
+    if (success)
     {
         tstart = ticks_get();
         state = NVRAM_STATE_BUSY;
