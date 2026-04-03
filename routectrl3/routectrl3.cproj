@@ -63,7 +63,6 @@
             <Value>LNPACKET_CNT=16</Value>
             <Value>EXTXTAL</Value>
             <Value>CMD_ARGUMENTS_MAX=20</Value>
-            <Value>NVRAM</Value>
             <Value>NDEBUG</Value>
           </ListValues>
         </avrgcc.compiler.symbols.DefSymbols>
@@ -110,7 +109,6 @@
             <Value>LNPACKET_CNT=16</Value>
             <Value>EXTXTAL</Value>
             <Value>CMD_ARGUMENTS_MAX=20</Value>
-            <Value>NVRAM</Value>
             <Value>DEBUG</Value>
             <Value>LNSTAT</Value>
             <Value>ROUTE_DEBUG</Value>
