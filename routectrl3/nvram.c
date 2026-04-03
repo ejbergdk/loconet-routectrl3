@@ -196,7 +196,7 @@ void nvram_update(void)
             uint8_t         i = writestack_cnt - 1;
             bool            success;
 
-#if NVRAM_BYTEADR
+#ifdef NVRAM_BYTEADR
             // High byte of address is embedded in chip address
             buffer[0] = writestack[i].adr & 0xff;
             buffer[1] = writestack[i].data;
@@ -244,7 +244,7 @@ bool nvram_read(uint16_t adr, uint8_t *buf, uint16_t len)
     if (!nvram_ready() || !twim_ready())
         return false;
 
-#if NVRAM_BYTEADR
+#ifdef NVRAM_BYTEADR
     // High byte of address is embedded in chip address
     buffer[0] = adr & 0xff;
     success = twim_write_read(NVRAM_SRAM_ADR + ((adr >> 7) & 0x0e), buffer, 1, buf, len, twi_done_cb);
