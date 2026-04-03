@@ -239,7 +239,7 @@ bool nvram_ready(void)
 
 bool nvram_read(uint16_t adr, uint8_t *buf, uint16_t len)
 {
-    bool success;
+    bool            success;
 
     if (!nvram_ready() || !twim_ready())
         return false;
