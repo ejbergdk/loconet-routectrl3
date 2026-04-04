@@ -18,8 +18,8 @@
 #include "lib/loconet-avrda/hal_ln.h"
 #include "lib/loconet-avrda/ln_rx.h"
 
-#ifdef EERAM
-#include "eeram.h"
+#ifdef NVRAM
+#include "nvram.h"
 #include "twim.h"
 #endif
 
@@ -47,9 +47,9 @@ int main(void)
 
     term_init();
     ticks_init();
-#ifdef EERAM
+#ifdef NVRAM
     twim_init();
-    eeram_init();
+    nvram_init();
 #endif
     hal_ln_init();
     ln_rx_init();
@@ -62,9 +62,9 @@ int main(void)
     while (1)
     {
         term_update();
-#ifdef EERAM
+#ifdef NVRAM
         twim_update();
-        eeram_update();
+        nvram_update();
 #endif
         hal_ln_update();
         ln_rx_update();

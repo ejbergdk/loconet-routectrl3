@@ -149,10 +149,10 @@
     <Compile Include="collision_check.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="eeram.c">
+    <Compile Include="nvram.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="eeram.h">
+    <Compile Include="nvram.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="fb_handler.c">
